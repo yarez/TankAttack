@@ -15,9 +15,11 @@ AWall::AWall()
 	{
 		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> WallMesh;
 		ConstructorHelpers::FObjectFinderOptional<UMaterialInstance> WallMaterial;
+		ConstructorHelpers::FObjectFinderOptional<UMaterialInstance> BreakWall;
 		FConstructorStatics()
 			: WallMesh(TEXT("/Game/WallMesh.WallMesh"))
 			, WallMaterial(TEXT("/Game/WallMaterial.WallMaterial"))
+			, BreakWall(TEXT("/Game/Break.Break"))
 		{
 		}
 	};
@@ -42,6 +44,8 @@ AWall::AWall()
 void AWall::BeginPlay()
 {
 	Super::BeginPlay();
+	if (canBreak)
+		WallMesh->SetMaterial(0, BreakMaterial);
 
 }
 

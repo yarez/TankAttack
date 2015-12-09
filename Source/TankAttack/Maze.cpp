@@ -173,6 +173,14 @@ void AMaze::RemoveWalls(void)
 		walls[mwID]->SetActorEnableCollision(false);
 		walls[mwID]->drawit = false;
 	}
+
+	for (int i = 0; i < 7; i++){
+		mwID = rand() % ((NumH + NumV) - 1);
+		while (!walls[mwID]->innerw || !walls[mwID]->drawit){
+			mwID = rand() % ((NumH + NumV) - 1);
+		}
+		walls[mwID]->canBreak = true;
+	}
 }
 
 //Look into this for removing more walls

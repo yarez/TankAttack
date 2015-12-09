@@ -22,10 +22,14 @@ public:
 	// Sets default values for this actor's properties
 	AWall();
 
-	bool drawit, innerw, orientation;
+	bool drawit, innerw, orientation, canBreak;
 	//bool movRight, movLeft, alreadymoving;
 	int cella, cellb;
 	//int steps;
+
+	/** Pointer to Breakable material used on walls that can break*/
+	UPROPERTY()
+	class UMaterialInstance* BreakMaterial;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

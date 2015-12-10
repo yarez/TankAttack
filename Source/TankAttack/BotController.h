@@ -29,8 +29,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Behavior)
 		void SearchForEnemy();
 
+	UFUNCTION(BlueprintCallable, Category = Behaviour)
+		bool PawnCanBeSeen(APawn * target);
+
 protected:
 	uint8 EnemyKeyID;
 	uint8 EnemyLocationID;
-
 };

@@ -32,9 +32,29 @@ void ABotController::Possess(class APawn* InPawn)
 	}
 }
 
+bool ABotController::PawnCanBeSeen(APawn* target)
+{
+	if (target == NULL || GetPawn() == NULL)
+	{
+		return false;
+	}
+	FVector difference = target->GetActorLocation() - GetPawn()->GetActorLocation();
+	float angle = FVector::DotProduct(difference, GetPawn()->GetActorRotation().Vector());
+
+	if (LineOfSightTo(target, GetPawn()->GetActorLocation()) && angle >0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void ABotController::SearchForEnemy()
 {
 	APawn* MyBot = GetPawn();
+	ABot* Tank = Cast<ABot>(GetPawn());
 	if (MyBot == NULL)
 		return;
 
@@ -45,13 +65,15 @@ void ABotController::SearchForEnemy()
 	for (FConstPawnIterator It = GetWorld()->GetPawnIterator(); It; It++)
 	{
 		ATank* TestPawn = Cast<ATank>(*It);
-		if (TestPawn)
-		{
-			const float DistSq = FVector::Dist(TestPawn->GetActorLocation(), MyLoc);
-			if (DistSq < BestDistSq)
+		if (PawnCanBeSeen(*It)){
+			if (TestPawn)
 			{
-				BestDistSq = DistSq;
-				BestPawn = TestPawn;
+				const float DistSq = FVector::Dist(TestPawn->GetActorLocation(), MyLoc);
+				if (DistSq < BestDistSq)
+				{
+					BestDistSq = DistSq;
+					BestPawn = TestPawn;
+				}
 			}
 		}
 	}
@@ -59,13 +81,17 @@ void ABotController::SearchForEnemy()
 	if (BestPawn)
 	{
 		SetEnemy(BestPawn);
+		FRotator Rot = FRotationMatrix::MakeFromX(BestPawn->GetActorLocation() - Tank->GetActorLocation()).Rotator();
+		Tank->BotTurret->SetWorldRotation(FRotator(0.f, Rot.Yaw, 0.f));
 	}
 }
 
 void ABotController::SetEnemy(class APawn* InPawn)
 {
 	BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
-	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation());
+	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation()*.5);
 }
+
+
 
 

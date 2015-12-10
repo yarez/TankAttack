@@ -14,6 +14,9 @@ public:
 	// Sets default values for this character's properties
 	ABot(const class FObjectInitializer&);
 
+	UPROPERTY(Category = TankParts, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* BotTurret;
+
 	UPROPERTY(EditAnywhere, Category = Behavior)
 	class UBehaviorTree* BotBehavior;
 

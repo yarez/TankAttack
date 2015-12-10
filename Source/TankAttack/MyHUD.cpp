@@ -300,7 +300,7 @@ void AMyHUD::DrawHUD(){
 	DrawText(TEXT("Arrow Keys to turn"), FColor::Red, x, y + 40, HUDFont, 2.0F, false);
 	DrawText(TEXT("Click mouse on enemy to shoot them"), FColor::Red, x, y + 80, HUDFont, 2.0F, false);
 	DrawText(TEXT("Some walls are breakable and can be shot at"), FColor::Red, x, y + 100, HUDFont, 2.0F, false);
-	DrawText(TEXT("------"), FColor::Red, x, y + 120, HUDFont, 2.0F, false);
+	DrawText(TEXT("Press M for Menu"), FColor::Red, x, y + 120, HUDFont, 2.0F, false);
 	DrawText(TEXT("Goal:"), FColor::Red, x, y + 160, HUDFont, 2.0F, false);
 	DrawText(TEXT("Destroy all enemies"), FColor::Red, x, y + 180, HUDFont, 2.0F, false);
 	DrawText(TEXT("Be the last one standing"), FColor::Red, x, y + 200, HUDFont, 2.0F, false);
@@ -310,7 +310,7 @@ void AMyHUD::DrawHUD(){
 	if (j > 450){ */
 	if (d1){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle1) > 0)
-			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, HUDFont, 4.0F, false);
+			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
 		else {
 			GetWorldTimerManager().ClearTimer(Handle1);
 			d1 = false;
@@ -320,7 +320,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d2){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle2) > 0)
-			DrawText(TEXT("2"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, HUDFont, 4.0F, false);
+			DrawText(TEXT("2"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
 		else{
 			GetWorldTimerManager().ClearTimer(Handle2);
 			d2 = false;
@@ -330,7 +330,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d3){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle3) > 0)
-			DrawText(TEXT("1"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, HUDFont, 4.0F, false);
+			DrawText(TEXT("1"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
 		else{
 			GetWorldTimerManager().ClearTimer(Handle3);
 			d3 = false;
@@ -340,10 +340,11 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d4){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle4) > 0)
-			DrawText(TEXT("GO!"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, HUDFont, 4.0F, false);
+			DrawText(TEXT("GO!"), FColor::Blue, (Canvas->SizeX / 2)-5, Canvas->SizeY / 2, SketchFont, 2.0F, false);
 		else{
 			d4 = false;
 			GetWorldTimerManager().ClearTimer(Handle4);
+			canMove = true;
 		}
 	}
 
@@ -397,13 +398,14 @@ void AMyHUD::BeginPlay()
 	GetWorldTimerManager().SetTimer(Handle2, this, &AMyHUD::Draw, 10.0f, false);
 	GetWorldTimerManager().SetTimer(Handle3, this, &AMyHUD::Draw, 10.0f, false);
 	GetWorldTimerManager().SetTimer(Handle4, this, &AMyHUD::Draw, 10.0f, false);*/
-	GetWorldTimerManager().SetTimer(Handle1, 3.0f, false);
-	GetWorldTimerManager().SetTimer(Handle2, 3.0f, false);
-	GetWorldTimerManager().SetTimer(Handle3, 3.0f, false);
-	GetWorldTimerManager().SetTimer(Handle4, 3.0f, false);
+	GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
+	GetWorldTimerManager().SetTimer(Handle2, 1.0f, false);
+	GetWorldTimerManager().SetTimer(Handle3, 1.0f, false);
+	GetWorldTimerManager().SetTimer(Handle4, 1.0f, false);
 	GetWorldTimerManager().PauseTimer(Handle2);
 	GetWorldTimerManager().PauseTimer(Handle3);
 	GetWorldTimerManager().PauseTimer(Handle4);
+	d1 = true, d2 = false, d3 = false, d4 = false;
 	//Create tick to display remaining time and possibly pause the time until the begin has made it off the screen
 	//Destroy the actor when the time runs out with a bool that connects to the actor class from here 
 	//in actor fix the calling of the function in block to switch the colors of the breadcrumbs 

@@ -80,6 +80,7 @@ public:
 	//States
 	bool ConfirmDialogOpen;
 	bool InMainMenu;
+	bool canMove = false; 
 
 	int32 		ActiveButton_Type;
 
@@ -187,7 +188,7 @@ public:
 	FTimerHandle Handle1, Handle2, Handle3, Handle4;
 	void AddHealth();
 	void LoseHealth();
-	bool d1=true, d2=false, d3=false, d4=false;
+	bool d1,d2,d3,d4;
 	//AMyHUD(const class FObjectInitializer &PCIP);
 	UFont *HUDFont;
 	virtual void BeginPlay() override;

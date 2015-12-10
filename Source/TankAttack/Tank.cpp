@@ -2,6 +2,7 @@
 
 #include "TankAttack.h"
 #include "Tank.h"
+#include "MyHUD.h"
 
 
 // Sets default values
@@ -29,7 +30,19 @@ void ATank::Tick( float DeltaTime )
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
-	Super::SetupPlayerInputComponent(InputComponent);
+	AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	check(InputComponent);
+	//Super::SetupPlayerInputComponent(InputComponent);
+	//Put movement for tank inside if statement
+	if (HUD->canMove){}
+	InputComponent->BindAction("Menu", IE_Pressed, this, &ATank::ToggleMenu);
+}
 
+void ATank::ToggleMenu(){
+	AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	if (HUD->DontDrawHUD == true)
+		HUD->DontDrawHUD = false;
+	else
+		HUD->DontDrawHUD = true;
 }
 

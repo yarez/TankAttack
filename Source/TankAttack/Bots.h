@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Bot.h"
 #include "GameFramework/Actor.h"
 #include "Bots.generated.h"
 
@@ -27,6 +28,6 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-	
+	TSubclassOf<class ABot> BotBlueprint;
 	
 };

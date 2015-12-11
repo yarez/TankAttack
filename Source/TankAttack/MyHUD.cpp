@@ -59,8 +59,9 @@ void AMyHUD::DrawHUD_DrawDialogs()
 void AMyHUD::DrawConfirm()
 {
 	//Blue rect with alpha 50%
-	DrawHUDRect(Canvas->SizeX / 2 - 90, Canvas->SizeY / 2 - 50, 200, 100, FLinearColor(0, 0, 0, 0.5));
-
+	DrawHUDRect(Canvas->SizeX / 2 - 100, Canvas->SizeY / 2 - 60, 220, 120, FLinearColor(1, 1, 1, 1));
+	DrawHUDRect(Canvas->SizeX / 2 - 90, Canvas->SizeY / 2 - 50, 200, 100, FLinearColor(0, 0, 0, 1));
+	
 	//Draw buttons
 	DrawConfirmButtons();
 }
@@ -70,16 +71,17 @@ void AMyHUD::DrawMainMenuButtons()
 {
 	//Start Point
 	float xStart = 100;
-	float yStart = 410;
+	float yStart = 200;
 
 	//Background
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 220)); //alpha 120/255
+	DrawHUDRect(xStart-10, yStart - 10, 170, 100, FLinearColor(0, 0, 0, 1));
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 255)); //alpha 120/255
 
 	//Text
 	DrawHUDText(
 		SketchFont, "Restart", xStart + 20, yStart + 20,
-		LC_Black, DefaultFontScale,
-		true
+		FColorBlack, DefaultFontScale,
+		false
 		);
 
 	//Clear buttons with ButtonsMain.Empty()
@@ -98,14 +100,15 @@ void AMyHUD::DrawMainMenuButtons()
 
 
 	xStart = 100;
-	yStart = 510;
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 220)); //alpha 120/255
+	yStart = 290;
+	DrawHUDRect(xStart - 10, yStart - 10, 170, 100, FLinearColor(0, 0, 0, 1));
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 255)); //alpha 120/255
 
 	//Text
 	DrawHUDText(
 		SketchFont, "Exit", xStart + 45, yStart + 20,
 		FColorBlack, DefaultFontScale,
-		true, FColor_White
+		false
 		);
 
 	if (ButtonsMain.Num() < 2)
@@ -134,7 +137,7 @@ void AMyHUD::DrawConfirmButtons()
 	DrawHUDText(
 		SketchFont, "Yes", xStart + 30, yStart + 20,
 		*ColorPtr, DefaultFontScale,
-		true
+		true, LC_White
 		);
 
 	if (ButtonsConfirm.Num() < 1)
@@ -161,7 +164,7 @@ void AMyHUD::DrawConfirmButtons()
 	DrawHUDText(
 		SketchFont, "No", xStart + 30, yStart + 20,
 		*ColorPtr, DefaultFontScale,
-		true
+		true, LC_White
 		);
 
 	if (ButtonsConfirm.Num() < 2)
@@ -232,10 +235,10 @@ void AMyHUD::DrawHealthBar()
 	}
 
 	DrawHUDRect(100, 100, 20, 20, LC_Blue1);
-	DrawHUDRect(150, 100, 20, 20, LC_Blue2);
-	DrawHUDRect(200, 100, 20, 20, LC_Blue3);
-	DrawHUDRect(250, 100, 20, 20, LC_Blue4);
-	DrawHUDRect(300, 100, 20, 20, LC_Blue5);
+	DrawHUDRect(120, 100, 20, 20, LC_Blue2);
+	DrawHUDRect(140, 100, 20, 20, LC_Blue3);
+	DrawHUDRect(160, 100, 20, 20, LC_Blue4);
+	DrawHUDRect(180, 100, 20, 20, LC_Blue5);
 
 }
 
@@ -353,7 +356,7 @@ void AMyHUD::DrawHUD(){
 	if (j > 450){ */
 	if (d1){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle1) > 0)
-			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2 -70, Canvas->SizeY / 2 -50, SketchFont, 2.0F, false);
 		else {
 			GetWorldTimerManager().ClearTimer(Handle1);
 			d1 = false;
@@ -363,7 +366,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d2){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle2) > 0)
-			DrawText(TEXT("2"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("2"), FColor::Blue, Canvas->SizeX / 2 -70, Canvas->SizeY / 2 - 50, SketchFont, 2.0F, false);
 		else{
 			GetWorldTimerManager().ClearTimer(Handle2);
 			d2 = false;
@@ -373,7 +376,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d3){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle3) > 0)
-			DrawText(TEXT("1"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("1"), FColor::Blue, Canvas->SizeX / 2 -70, Canvas->SizeY / 2 -50, SketchFont, 2.0F, false);
 		else{
 			GetWorldTimerManager().ClearTimer(Handle3);
 			d3 = false;
@@ -383,7 +386,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d4){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle4) > 0)
-			DrawText(TEXT("GO!"), FColor::Blue, (Canvas->SizeX / 2)-5, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("GO!"), FColor::Blue, (Canvas->SizeX / 2)-95, Canvas->SizeY / 2-50, SketchFont, 2.0F, false);
 		else{
 			d4 = false;
 			GetWorldTimerManager().ClearTimer(Handle4);

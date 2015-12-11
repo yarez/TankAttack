@@ -32,7 +32,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		bool PawnCanBeSeen(APawn * target);
 
+	// Called every frame
+	virtual void Tick(float DeltaSeconds) override;
+
 protected:
 	uint8 EnemyKeyID;
 	uint8 EnemyLocationID;
+	uint8 CanMoveID;
+	uint8 HasStartedID;
 };

@@ -4,6 +4,7 @@
 #include "BotController.h"
 #include "Bot.h"
 #include "Tank.h"
+#include "MyHUD.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
@@ -27,6 +28,8 @@ void ABotController::Possess(class APawn* InPawn)
 		BlackboardComp->InitializeBlackboard(*BlackboardData);
 		EnemyKeyID = BlackboardComp->GetKeyID("Enemy");
 		EnemyLocationID = BlackboardComp->GetKeyID("Destination");
+		CanMoveID = BlackboardComp->GetKeyID("CanMove");
+		HasStartedID = BlackboardComp->GetKeyID("HasStarted");
 
 		BehaviorComp->StartTree(*Bot->BotBehavior);
 	}
@@ -58,6 +61,8 @@ void ABotController::SearchForEnemy()
 	if (MyBot == NULL)
 		return;
 
+	BlackboardComp->SetValue<UBlackboardKeyType_Bool>(HasStartedID, true);
+
 	const FVector MyLoc = MyBot->GetActorLocation();
 	float BestDistSq = MAX_FLT;
 	ATank* BestPawn = NULL;
@@ -65,14 +70,17 @@ void ABotController::SearchForEnemy()
 	for (FConstPawnIterator It = GetWorld()->GetPawnIterator(); It; It++)
 	{
 		ATank* TestPawn = Cast<ATank>(*It);
-		if (PawnCanBeSeen(*It)){
-			if (TestPawn)
+		
+		if (TestPawn)
+		{
+			const float DistSq = FVector::Dist(TestPawn->GetActorLocation(), MyLoc);
+			if (DistSq < BestDistSq)
 			{
-				const float DistSq = FVector::Dist(TestPawn->GetActorLocation(), MyLoc);
-				if (DistSq < BestDistSq)
-				{
-					BestDistSq = DistSq;
-					BestPawn = TestPawn;
+				BestDistSq = DistSq;
+				BestPawn = TestPawn;
+				if (PawnCanBeSeen(*It)){
+					FRotator Rot = FRotationMatrix::MakeFromX(BestPawn->GetActorLocation() - Tank->GetActorLocation()).Rotator();
+					Tank->BotTurret->SetWorldRotation(FRotator(0.f, Rot.Yaw, 0.f));
 				}
 			}
 		}
@@ -81,15 +89,24 @@ void ABotController::SearchForEnemy()
 	if (BestPawn)
 	{
 		SetEnemy(BestPawn);
-		FRotator Rot = FRotationMatrix::MakeFromX(BestPawn->GetActorLocation() - Tank->GetActorLocation()).Rotator();
-		Tank->BotTurret->SetWorldRotation(FRotator(0.f, Rot.Yaw, 0.f));
 	}
+
 }
 
 void ABotController::SetEnemy(class APawn* InPawn)
 {
 	BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation()*.5);
+}
+
+
+// Called every frame
+void ABotController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AMyHUD* InHUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	BlackboardComp->SetValue<UBlackboardKeyType_Bool>(CanMoveID, InHUD->canMove);
+
 }
 
 

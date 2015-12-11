@@ -2,6 +2,7 @@
 
 #include "TankAttack.h"
 #include "Bot.h"
+#include "MyHUD.h"
 #include "BotController.h"
 
 // Sets default values
@@ -23,12 +24,5 @@ ABot::ABot(const class FObjectInitializer&)
 void ABot::BeginPlay()
 {
 	Super::BeginPlay();
-
-}
-
-// Called every frame
-void ABot::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
 }

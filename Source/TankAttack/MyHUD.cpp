@@ -21,7 +21,7 @@ const FLinearColor AMyHUD::LC_Black = FLinearColor(0, 0, 0, 1);
 const FLinearColor AMyHUD::LC_Pink = FLinearColor(1, 0, 1, 1);
 const FLinearColor AMyHUD::LC_Red = FLinearColor(1, 0, 0, 1);
 const FLinearColor AMyHUD::LC_Yellow = FLinearColor(1, 1, 0, 1);
-
+const FLinearColor AMyHUD::LC_White = FLinearColor(1, 1, 1, 1);
 
 AMyHUD::AMyHUD(const class FObjectInitializer &PCIP) :Super(PCIP){
 	//Draw HUD?
@@ -42,14 +42,13 @@ AMyHUD::AMyHUD(const class FObjectInitializer &PCIP) :Super(PCIP){
 }
 
 void AMyHUD::AddHealth(){
-	t += 5;
-	//GetWorldTimerManager().SetTimer(Handle, this, &AMyHUD::Draw, t, false);
+	add = true;
 }
 
 void AMyHUD::LoseHealth(){
-	t -= 5;
-	//GetWorldTimerManager().SetTimer(Handle, this, &AMyHUD::Draw, t, false);
+	lose = true;
 }
+
 // Draw Dialogs
 void AMyHUD::DrawHUD_DrawDialogs()
 {
@@ -60,7 +59,7 @@ void AMyHUD::DrawHUD_DrawDialogs()
 void AMyHUD::DrawConfirm()
 {
 	//Blue rect with alpha 50%
-	DrawHUDRect(Canvas->SizeX / 2 - 90, Canvas->SizeY / 2 - 50, 200, 100, FLinearColor(0, 0, 1, 0.2333));
+	DrawHUDRect(Canvas->SizeX / 2 - 90, Canvas->SizeY / 2 - 50, 200, 100, FLinearColor(0, 0, 0, 0.5));
 
 	//Draw buttons
 	DrawConfirmButtons();
@@ -74,13 +73,13 @@ void AMyHUD::DrawMainMenuButtons()
 	float yStart = 410;
 
 	//Background
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 120)); //alpha 120/255
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 220)); //alpha 120/255
 
 	//Text
 	DrawHUDText(
 		SketchFont, "Restart", xStart + 20, yStart + 20,
 		LC_Black, DefaultFontScale,
-		true, FColorYellow
+		true
 		);
 
 	//Clear buttons with ButtonsMain.Empty()
@@ -100,14 +99,13 @@ void AMyHUD::DrawMainMenuButtons()
 
 	xStart = 100;
 	yStart = 510;
-
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 120)); //alpha 120/255
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 220)); //alpha 120/255
 
 	//Text
 	DrawHUDText(
 		SketchFont, "Exit", xStart + 45, yStart + 20,
 		FColorBlack, DefaultFontScale,
-		true, FColorYellow
+		true, FColor_White
 		);
 
 	if (ButtonsMain.Num() < 2)
@@ -130,7 +128,7 @@ void AMyHUD::DrawConfirmButtons()
 
 	//Highlighted?
 	if (ActiveButton_Type == BUTTONTYPE_CONFIRM_YES) ColorPtr = &LC_Red;
-	else ColorPtr = &LC_Yellow;
+	else ColorPtr = &LC_White;
 
 	//Text
 	DrawHUDText(
@@ -157,7 +155,7 @@ void AMyHUD::DrawConfirmButtons()
 
 	//Highlighted?
 	if (ActiveButton_Type == BUTTONTYPE_CONFIRM_NO) ColorPtr = &LC_Red;
-	else ColorPtr = &LC_Yellow;
+	else ColorPtr = &LC_White;
 
 	//Text
 	DrawHUDText(
@@ -189,11 +187,56 @@ void AMyHUD::DrawHealthBar()
 		);
 
 	//Goes from left to right
-	DrawHUDRect(100, 100, 50, 50, FLinearColor(0, 1, 0, 1));
-	DrawHUDRect(150, 100, 50, 50, FLinearColor(0, 1, 0, 1));
-	DrawHUDRect(200, 100, 50, 50, FLinearColor(0, 1, 0, 1));
-	DrawHUDRect(250, 100, 50, 50, FLinearColor(0, 1, 0, 1));
-	DrawHUDRect(300, 100, 50, 50, FLinearColor(0, 1, 0, 1));
+	if (add && !gameover){
+		if (LC_Blue2.A == 0){
+			LC_Blue2.A = 1;
+			add = false;
+		}
+		else if (LC_Blue3.A == 0){
+			LC_Blue3.A = 1;
+			add = false;
+		}
+		else if (LC_Blue4.A == 0){
+			LC_Blue4.A = 1; 
+			add = false;
+		}
+		else if (LC_Blue5.A == 0){
+			LC_Blue5.A = 1;
+			add = false;
+		}
+
+	}
+
+	if (lose){
+		if (LC_Blue5.A == 1){
+			LC_Blue5.A = 0;
+			lose = false;
+		}
+		else if (LC_Blue4.A == 1){
+			LC_Blue4.A = 0;
+			lose = false;
+		}
+		else if (LC_Blue3.A == 1){
+			LC_Blue3.A = 0;
+			lose = false;
+		}
+		else if (LC_Blue2.A == 1){
+			LC_Blue2.A = 0;
+			lose = false;
+		}
+		else if (LC_Blue1.A == 1){
+			LC_Blue1.A = 0;
+			lose = false;
+			gameover = true; 
+		}
+	}
+
+	DrawHUDRect(100, 100, 20, 20, LC_Blue1);
+	DrawHUDRect(150, 100, 20, 20, LC_Blue2);
+	DrawHUDRect(200, 100, 20, 20, LC_Blue3);
+	DrawHUDRect(250, 100, 20, 20, LC_Blue4);
+	DrawHUDRect(300, 100, 20, 20, LC_Blue5);
+
 }
 
 // Is cursor in Buttons

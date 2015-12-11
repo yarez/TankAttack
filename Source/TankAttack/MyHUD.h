@@ -83,6 +83,12 @@ public:
 	bool canMove = false; 
 
 	int32 		ActiveButton_Type;
+	FLinearColor LC_Blue1 = FLinearColor(0, 0, 1, 1);
+	FLinearColor LC_Blue2 = FLinearColor(0, 0, 1, 1);
+	FLinearColor LC_Blue3 = FLinearColor(0, 0, 1, 1);
+	FLinearColor LC_Blue4 = FLinearColor(0, 0, 1, 1);
+	FLinearColor LC_Blue5 = FLinearColor(0, 0, 1, 1);
+	bool add = false, lose = false; 
 
 	bool CursorHoveringInButton;
 	//Colors
@@ -97,6 +103,7 @@ public:
 	static const FLinearColor LC_Pink;
 	static const FLinearColor LC_Red;
 	static const FLinearColor LC_Yellow;
+	static const FLinearColor LC_White;
 
 	FORCEINLINE void DrawHUDRect(
 		float X, float Y,

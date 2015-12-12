@@ -216,6 +216,12 @@ void AMyHUD::DrawHealthBar()
 		true
 		);
 
+	DrawHUDText(
+		ToyFont, "Tank Attack", 290, 20,
+		FColor_White, 1.0F,
+		true
+		);
+
 	//Goes from left to right
 	if (add && !gameover){
 		if (LC_Blue2.A == 0){
@@ -384,19 +390,37 @@ void AMyHUD::DrawHUD(){
 
 	FVector2D ScreenSize = FVector2D(Canvas->SizeX, Canvas->SizeY);
 	Super::DrawHUD();
-	/*DrawText(TEXT("Controls:"), FColor::Red, x, y, HUDFont, 2.0F, false);
-	DrawText(TEXT("WASD to Move"), FColor::Red, x, y + 20, HUDFont, 2.0F, false);
-	DrawText(TEXT("Arrow Keys to turn"), FColor::Red, x, y + 40, HUDFont, 2.0F, false);
-	DrawText(TEXT("Click mouse on enemy to shoot them"), FColor::Red, x, y + 80, HUDFont, 2.0F, false);
-	DrawText(TEXT("Some walls are breakable and can be shot at"), FColor::Red, x, y + 100, HUDFont, 2.0F, false);
-	DrawText(TEXT("Press M for Menu"), FColor::Red, x, y + 120, HUDFont, 2.0F, false);
-	DrawText(TEXT("Goal:"), FColor::Red, x, y + 160, HUDFont, 2.0F, false);
-	DrawText(TEXT("Destroy all enemies"), FColor::Red, x, y + 180, HUDFont, 2.0F, false);
-	DrawText(TEXT("Be the last one standing"), FColor::Red, x, y + 200, HUDFont, 2.0F, false);
-	DrawText(TEXT("------"), FColor::Red, x, y + 220, HUDFont, 2.0F, false);
-	DrawText(TEXT("------"), FColor::Red, x, y + 240, HUDFont, 2.0F, false);
-	y -= .5;
-	if (j > 450){ */
+	if (d5){
+		if (GetWorldTimerManager().GetTimerRemaining(Handle5) > 0){
+			DrawHUDText(ToyFont, "Controls:", x, y, FColorRed, 1.0F,true);
+			DrawHUDText(SketchFont, "WASD to Move", x, y+43, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(SketchFont, "Mouse to aim", x, y+63, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(SketchFont, "Click to shoot", x, y+83, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(SketchFont, "Some walls are breakable", x, y+103, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(SketchFont, "Press M for Menu", x, y+123, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(ToyFont, "-----------------", x, y+160, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(ToyFont, "Goal:", x, y+200, FColorRed, 1.0F, true);
+			DrawHUDText(SketchFont, "Destroy every enemy", x, y+243, FColorRed, .5F, true,LC_Red);
+			DrawHUDText(SketchFont, "Be the sole survivor", x, y+263, FColorRed, .5F, true,LC_Red);
+			/*DrawText(TEXT("Controls:"), FColor::Red, x, y, ToyFont, 1.0F, false);
+			DrawText(TEXT("WASD to Move"), FColor::Red, x, y + 40, SketchFont, .5F, false);
+			DrawText(TEXT("Mouse to aim"), FColor::Red, x, y + 60, SketchFont, .5F, false);
+			DrawText(TEXT("Click to shoot"), FColor::Red, x, y + 80, SketchFont, .5F, false);
+			DrawText(TEXT("Some walls are breakable"), FColor::Red, x, y + 100, SketchFont, .5F, false);
+			DrawText(TEXT("Press M for Menu"), FColor::Red, x, y + 120, SketchFont, .5F, false);
+			DrawText(TEXT("-----------------"), FColor::Red, x, y + 160, ToyFont, .5F, false);
+			DrawText(TEXT("Goal:"), FColor::Red, x, y + 200, ToyFont, 1.0F, false);
+			DrawText(TEXT("Destroy all enemies"), FColor::Red, x, y + 240, SketchFont, .5F, false);
+			DrawText(TEXT("Be the last one standing"), FColor::Red, x, y + 260, SketchFont, .5F, false);*/
+		}
+		else {
+			GetWorldTimerManager().ClearTimer(Handle5);
+			d5 = false;
+			d1 = true; 
+			GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
+		}
+	}
+
 	if (d1){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle1) > 0)
 			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2 -70, Canvas->SizeY / 2 -50, SketchFont, 2.0F, false);
@@ -490,11 +514,11 @@ void AMyHUD::BeginPlay()
 	GetWorldTimerManager().SetTimer(Handle2, this, &AMyHUD::Draw, 10.0f, false);
 	GetWorldTimerManager().SetTimer(Handle3, this, &AMyHUD::Draw, 10.0f, false);
 	GetWorldTimerManager().SetTimer(Handle4, this, &AMyHUD::Draw, 10.0f, false);*/
-	GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
+	GetWorldTimerManager().SetTimer(Handle5, 30.0f, false);
 	//GetWorldTimerManager().PauseTimer(Handle2);
 	//GetWorldTimerManager().PauseTimer(Handle3);
 	//GetWorldTimerManager().PauseTimer(Handle4);
-	d1 = true, d2 = false, d3 = false, d4 = false;
+	d1 = false, d2 = false, d3 = false, d4 = false, d5 = true;
 	gameover = false; 
 
 	//Create tick to display remaining time and possibly pause the time until the begin has made it off the screen

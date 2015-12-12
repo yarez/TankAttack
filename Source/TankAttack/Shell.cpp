@@ -1,11 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAttack.h"
-#include "Shell.h"
+
 #include "TankController.h"
+#include "HealthPack.h"
+#include "Tank.h"
 #include "Wall.h"
 #include "Bot.h"
 #include "MyHUD.h"
+#include "Shell.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 AShell::AShell()
@@ -14,8 +17,7 @@ AShell::AShell()
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
-	AActor* ShellAsActor = Cast<AActor>(this);
-	ShellAsActor->OnActorHit.AddDynamic(this, &AShell::OnHit);		// set up a notification for when this component hits something blocking
+	CollisionComp->OnComponentHit.AddDynamic(this, &AShell::OnHit);		// set up a notification for when this component hits something blocking
 
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
@@ -36,12 +38,26 @@ AShell::AShell()
 	InitialLifeSpan = 3.0f;
 }
 
-void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse, const FHitResult& Hit)
+void AShell::OnHit(AActor* SelfActor, UPrimitiveComponent *otherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
 	GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm hitting somethin! ");
-	if (GEngine){
-		if (otherActor->GetActorLabel().Contains(TEXT("Wall"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			AWall* ThisWall = Cast<AWall>(otherActor);
+	AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	
+	TArray<AActor*> OverlapActors;
+	UClass* filter = 0;
+
+	AWall* ThisWall = Cast<AWall>(otherActor);
+	GetOverlappingActors(OverlapActors, filter);
+		if (OverlapActors.Find(ThisWall)){
+			//WallActor->SetActorHiddenInGame(true);
+			//WallActor->SetActorEnableCollision(false);
+		//}
+
+	//}
+	//if (GEngine){
+		//if (otherActor->GetActorLabel().Contains(TEXT("Wall"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
+			
+			GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I HIT WALL! ");
 			FVector newDir = this->GetVelocity();
 			if (ThisWall->orientation){ //if the wall is vertical
 				ProjectileMovement->SetVelocityInLocalSpace(FVector((newDir.X * -1), newDir.Y, newDir.Z));
@@ -49,54 +65,43 @@ void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse,
 			else {
 				ProjectileMovement->SetVelocityInLocalSpace(FVector(newDir.X, (newDir.Y * -1), newDir.Z));
 			}
-
 			if (ThisWall->canBreak){
-				ThisWall->hits++;
-				if (ThisWall->hits >= 2){
+				//ThisWall->hits += 1;
+				//if (ThisWall->hits >= 2){
 					ThisWall->SetActorHiddenInGame(false);
 					ThisWall->SetActorEnableCollision(false);
-				}
+			//	}
 			}
-			
 		}
 
-		/*APill* PillHit = Cast<APill>(otherActor);
-		//AMyHUD*	HUD = Cast<AMyHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
-		AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-		if (otherActor->GetActorLabel().Contains(TEXT("Tank"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			otherActor->SetActorHiddenInGame(true);
-			otherActor->SetActorEnableCollision(false);
+		ATank* ThisTank = Cast<ATank>(otherActor);
+		if (OverlapActors.Find(ThisTank)){
+		//if (otherActor->GetActorLabel().Contains(TEXT("Tank"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
+			HUD->LoseHealth();
+			GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "HIT MYSELF! ");
+		}
 
-			if (PillHit->isWhite)
-				invPills++;
-			else if (PillHit->isRed){
-				GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Red, "Ouch! "); //Detract Time
-				HUD->sub5();
-			}
-			else if (PillHit->isBlue){
-				GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "Refreshing! "); //Add Time
-				HUD->add5();
-			}
+		ABot* ThisBot = Cast<ABot>(otherActor);
+		if (OverlapActors.Find(ThisBot)){
+		//if (otherActor->GetActorLabel().Contains(TEXT("Bot"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
+			
+			//ThisBot->hits += 1;
+			//if (ThisBot->hits >= 3){
+				ThisBot->SetActorHiddenInGame(true);
+				ThisBot->SetActorEnableCollision(false);
+			//}
+			GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "KILL ENEMY! ");
 		}
 		
-		AWall* WallHit = Cast<AWall>(otherActor);
-		if (otherActor->GetActorLabel().Contains(TEXT("Health"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			WallActor = otherActor;
+		AHealthPack* ThisPack = Cast<AHealthPack>(otherActor);
+		if (OverlapActors.Find(ThisPack)){
+		//if (otherActor->GetActorLabel().Contains(TEXT("HealthPack"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
+			HUD->AddHealth();
+			ThisPack->SetActorHiddenInGame(true);
+			ThisPack->SetActorEnableCollision(false);
+			GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "ST MARAS BLESSING! ");
 		}
-
-		if (otherActor->GetActorLabel().Contains(TEXT("Bot"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			AMyHUD* HUD2 = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-			if (invPills < 20)
-				HUD2->NoWinDraw();
-			//GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Red, "Sorry! Not enough pills! Go find me some more! ");
-			else
-				HUD2->WinDraw();
-			//GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "YOU'RE CURED! YAY");
-
-		}*/
-
-
-	}
+	//}
 }
 
 

@@ -20,7 +20,6 @@ void ATankController::Tick(float DeltaTime)
 
 	// Trace to see what is under the mouse cursor
 
-	FHitResult Hit;
 	GetHitResultUnderCursor(ECC_Visibility, false, Hit);
 
 	if (Hit.bBlockingHit)
@@ -37,4 +36,9 @@ void ATankController::SetPointLocation(const FVector Location){
 		FRotator Rot = FRotationMatrix::MakeFromX(Location - Tank->GetActorLocation()).Rotator();
 		Tank->Turret->SetWorldRotation(FRotator(0.f, Rot.Yaw, 0.f));
 	}
+
+	FVector dir;
+	dir = Hit.ImpactPoint - Tank->GetActorLocation();
+	dir = dir.GetSafeNormal(1.0f) * 1000;
+	Tank->Direction = FVector(dir.X, dir.Y, 0.f);
 }

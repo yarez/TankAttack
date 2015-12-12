@@ -15,6 +15,8 @@ class TANKATTACK_API ATankController : public APlayerController
 
 public:
 	ATankController();
+
+	FHitResult Hit;
 	
 protected:
 	// Called every frame

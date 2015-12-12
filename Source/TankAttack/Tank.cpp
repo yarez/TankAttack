@@ -3,10 +3,9 @@
 #include "TankAttack.h"
 #include "Tank.h"
 #include "TankController.h"
+#include "Shell.h"
 #include "MyHUD.h"
 #include "GameFramework/PlayerController.h"
-
-
 
 // Sets default values
 ATank::ATank()
@@ -45,7 +44,6 @@ ATank::ATank()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->AirControl = 0.2f;
 
-
 }
 
 // Called when the game starts or when spawned
@@ -81,6 +79,8 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 		InputComponent->BindAxis("TurnRate", this, &ATank::TurnAtRate);
 		InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 		InputComponent->BindAxis("LookUpRate", this, &ATank::LookUpAtRate);
+
+		InputComponent->BindAction("Fire", IE_Pressed, this, &ATank::OnFire);
 	//}
 }
 
@@ -137,4 +137,30 @@ void ATank::ToggleMenu(){
 		HUD->DontDrawHUD = false;
 		HUD->ThePC->ConsoleCommand("Pause");
 	}
+}
+
+void ATank::OnFire()
+{
+	// try and fire a projectile
+	//if (ProjectileClass != NULL)
+	//{
+	const FRotator SpawnRotation = GetControlRotation();
+	// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+	//const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
+	const FVector SpawnLocation = Turret->GetSocketLocation("GunSocket");
+
+	AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
+	NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
+
+	// spawn the projectile at the muzzle
+	//World->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
+
+	GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm spawning shit! ");
+	//}	
+	// try and play the sound if specified
+	if (FireSound != NULL)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+	}
+
 }

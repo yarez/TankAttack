@@ -514,7 +514,7 @@ void AMyHUD::BeginPlay()
 	GetWorldTimerManager().SetTimer(Handle2, this, &AMyHUD::Draw, 10.0f, false);
 	GetWorldTimerManager().SetTimer(Handle3, this, &AMyHUD::Draw, 10.0f, false);
 	GetWorldTimerManager().SetTimer(Handle4, this, &AMyHUD::Draw, 10.0f, false);*/
-	GetWorldTimerManager().SetTimer(Handle5, 30.0f, false);
+	GetWorldTimerManager().SetTimer(Handle5, 13.0f, false);
 	//GetWorldTimerManager().PauseTimer(Handle2);
 	//GetWorldTimerManager().PauseTimer(Handle3);
 	//GetWorldTimerManager().PauseTimer(Handle4);

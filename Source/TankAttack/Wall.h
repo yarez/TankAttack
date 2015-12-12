@@ -26,6 +26,8 @@ public:
 	//bool movRight, movLeft, alreadymoving;
 	int cella, cellb;
 	//int steps;
+	
+	int hits;
 
 	/** Pointer to Breakable material used on walls that can break*/
 	UPROPERTY()

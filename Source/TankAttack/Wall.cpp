@@ -38,6 +38,8 @@ AWall::AWall()
 	WallMesh->SetMaterial(0, ConstructorStatics.WallMaterial.Get());
 	WallMesh->SetSimulatePhysics(false);
 	WallMesh->AttachTo(DummyRoot);
+
+	hits = 0;
 }
 
 // Called when the game starts or when spawned

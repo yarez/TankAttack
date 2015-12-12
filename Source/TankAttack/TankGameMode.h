@@ -12,8 +12,4 @@ UCLASS()
 class TANKATTACK_API ATankGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
-	
-	
-	
 };

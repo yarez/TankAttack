@@ -17,13 +17,13 @@ class TANKATTACK_API ATank : public ACharacter
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
-
-	
 	
 
 public:
 	// Sets default values for this character's properties
 	ATank();
+
+	FVector Direction;
 
 	UPROPERTY(Category = TankParts, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* Turret;
@@ -35,6 +35,17 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
+
+	/** Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+		TSubclassOf<class AShell> ProjectileClass;
+
+	/** Sound to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class USoundBase* FireSound;
+
+	UFUNCTION(BlueprintCallable, Category = GunGunGun)
+		void OnFire();
 
 	void ToggleMenu();
 

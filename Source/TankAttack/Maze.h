@@ -24,15 +24,14 @@ public:
 	UPROPERTY(Category = Grid, EditAnywhere, BlueprintReadOnly)
 		int32 Size;
 
+	UPROPERTY(Category = Stream, EditAnywhere)
+		FRandomStream stream;
+
 	//finds the roots of two cells for disjoint set
 	int FindRoot(int root, int cells[]);
 
 	//Rmoves the walls to create the maze
 	void RemoveWalls(void);
-	//void RemoveExit(void);
-
-	//Moves walls for an organic maze that is constantly changing
-	void Organic(void);
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

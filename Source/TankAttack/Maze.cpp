@@ -127,6 +127,10 @@ void AMaze::RemoveWalls(void)
 	int totalsets = Size*Size;
 	int wallID, mwID = 0;
 	int aroot, broot;
+	//ATankGameState* TankState = Cast<ATankGameState>(GetWorld()->GetGameState());
+	//int32 Seed = TankMode->rand.GetCurrentSeed();
+
+	stream.GetInitialSeed();
 
 	int* cells = new int[Size*Size];
 	for (int i = 0; i < totalsets; i++){
@@ -134,9 +138,10 @@ void AMaze::RemoveWalls(void)
 	}
 
 	while (totalsets > 1){
-		wallID = rand() % (NumH + NumV);
+		//wallID = rand() % (NumH + NumV);
+		wallID = stream.FRandRange(0, NumH + NumV);
 		while (!(walls[wallID]->drawit) || !(walls[wallID]->innerw)){
-			wallID = rand() % (NumH + NumV);
+			wallID = stream.FRandRange(0, NumH + NumV);
 		}
 
 		aroot = FindRoot(walls[wallID]->cella, cells);
@@ -165,9 +170,10 @@ void AMaze::RemoveWalls(void)
 		}
 	}
 	for (int i = 0; i < 60; i++){
-		mwID = rand() % ((NumH + NumV) - 1);
+		//mwID = rand() % ((NumH + NumV) - 1);
+		mwID = stream.FRandRange(0, (NumH + NumV) - 1);
 		while (!walls[mwID]->innerw || !walls[mwID]->drawit){
-			mwID = rand() % ((NumH + NumV) - 1);
+			mwID = stream.FRandRange(0, (NumH + NumV) - 1);
 		}
 		walls[mwID]->SetActorHiddenInGame(true);
 		walls[mwID]->SetActorEnableCollision(false);
@@ -175,34 +181,12 @@ void AMaze::RemoveWalls(void)
 	}
 
 	for (int i = 0; i < 7; i++){
-		mwID = rand() % ((NumH + NumV) - 1);
+		mwID = stream.FRandRange(0, (NumH + NumV) - 1);
 		while (!walls[mwID]->innerw || !walls[mwID]->drawit){
-			mwID = rand() % ((NumH + NumV) - 1);
+			mwID = stream.FRandRange(0, (NumH + NumV) - 1);
 		}
 		walls[mwID]->canBreak = true;
 	}
-}
-
-//Look into this for removing more walls
-void AMaze::Organic(void)
-{
-	int mwID;
-	int pickdir; //left = true, right = false
-	bool direction = NULL;
-
-	mwID = rand() % (NumH + NumV - (Size*Size - 1) - 1);
-
-	while (!mazewalls[mwID]->innerw || !mazewalls[mwID]->drawit){
-		mwID = rand() % (NumH + NumV - (Size*Size - 1) - 1);
-	}
-	pickdir = rand() % 2;
-
-	if (pickdir == 1)
-		direction = true;
-	else if (pickdir == 0)
-		direction = false;
-
-	//mazewalls[mwID]->MoveWall(direction);
 }
 
 // Called every frame

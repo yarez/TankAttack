@@ -11,6 +11,17 @@ class TANKATTACK_API ABot : public ACharacter
 	GENERATED_BODY()
 
 public:
+
+	UFUNCTION(BlueprintCallable, Category = GunGunGun)
+	void BotOnFire();
+
+	void ShotTimerExpired();
+
+	FVector Direction;
+
+	/* Flag to control firing  */
+	bool bCanFire = true;
+
 	// Sets default values for this character's properties
 	ABot(const class FObjectInitializer&);
 
@@ -19,6 +30,10 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Behavior)
 	class UBehaviorTree* BotBehavior;
+
+	/** Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AShell> ProjectileClass;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -5,6 +5,7 @@
 #include "TankController.h"
 #include "Shell.h"
 #include "MyHUD.h"
+#include "TimerManager.h"
 #include "GameFramework/PlayerController.h"
 
 // Sets default values
@@ -144,23 +145,34 @@ void ATank::OnFire()
 	// try and fire a projectile
 	//if (ProjectileClass != NULL)
 	//{
-	const FRotator SpawnRotation = GetControlRotation();
-	// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-	//const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
-	const FVector SpawnLocation = Turret->GetSocketLocation("GunSocket");
-
-	AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
-	NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
-
-	// spawn the projectile at the muzzle
-	//World->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
-
-	GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm spawning shit! ");
-	//}	
-	// try and play the sound if specified
-	if (FireSound != NULL)
+	if (bCanFire)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+		const FRotator SpawnRotation = GetControlRotation();
+		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+		//const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
+		const FVector SpawnLocation = Turret->GetSocketLocation("GunSocket");
+
+		AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
+		NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
+
+		bCanFire = false;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ATank::ShotTimerExpired, 1.f);
+
+		// spawn the projectile at the muzzle
+		//World->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
+
+		GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm spawning shit! ");
+		//}	
+		// try and play the sound if specified
+		if (FireSound != NULL)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+		}
 	}
 
+}
+
+void ATank::ShotTimerExpired()
+{
+	bCanFire = true;
 }

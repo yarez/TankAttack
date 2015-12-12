@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Tank.h"
 #include "AIController.h"
 #include "BotController.generated.h"
 
@@ -31,6 +32,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		bool PawnCanBeSeen(APawn * target);
+
+	ATank* BestPawn;
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;

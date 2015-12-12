@@ -51,6 +51,12 @@ public:
 
 protected:
 
+	/* Flag to control firing  */
+	bool bCanFire = true;
+
+	/** Handle for efficient management of ShotTimerExpired timer */
+	FTimerHandle TimerHandle_ShotTimerExpired;
+
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -84,5 +90,6 @@ protected:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-	
+
+	void ShotTimerExpired();
 };

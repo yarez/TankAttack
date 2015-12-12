@@ -3,7 +3,6 @@
 #include "TankAttack.h"
 #include "BotController.h"
 #include "Bot.h"
-#include "Tank.h"
 #include "MyHUD.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
@@ -16,6 +15,8 @@ ABotController::ABotController(const class FObjectInitializer& PCIP)
 	BlackboardComp = PCIP.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
 
 	BehaviorComp = PCIP.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
+
+	BestPawn = NULL;
 }
 
 void ABotController::Possess(class APawn* InPawn)
@@ -65,7 +66,7 @@ void ABotController::SearchForEnemy()
 
 	const FVector MyLoc = MyBot->GetActorLocation();
 	float BestDistSq = MAX_FLT;
-	ATank* BestPawn = NULL;
+	
 
 	for (FConstPawnIterator It = GetWorld()->GetPawnIterator(); It; It++)
 	{
@@ -98,6 +99,12 @@ void ABotController::SetEnemy(class APawn* InPawn)
 	FVector random = InPawn->GetActorLocation() + (rand() % 50) + 2;
 	BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation());
+
+	ABot* BotControlled = Cast<ABot>(GetPawn());
+	FVector dir;
+	dir = InPawn->GetActorLocation() - BotControlled->GetActorLocation();
+	dir = dir.GetSafeNormal(1.0f) * 1000;
+	BotControlled->Direction = FVector(dir.X, dir.Y, 0.f);
 }
 
 

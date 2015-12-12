@@ -60,7 +60,8 @@ void AMyHUD::DrawHUD_DrawDialogs()
 void AMyHUD::DrawConfirm()
 {
 	//Blue rect with alpha 50%
-	DrawHUDRect(Canvas->SizeX / 2 - 90, Canvas->SizeY / 2 - 50, 200, 100, FLinearColor(0, 0, 0, 0.5));
+	DrawHUDRect(Canvas->SizeX / 2 - 100, Canvas->SizeY / 2 - 60, 220, 120, FLinearColor(1, 1, 1, 1));
+	DrawHUDRect(Canvas->SizeX / 2 - 90, Canvas->SizeY / 2 - 50, 200, 100, FLinearColor(0, 0, 0, 1));
 
 	//Draw buttons
 	DrawConfirmButtons();
@@ -71,7 +72,6 @@ void AMyHUD::DrawMainMenuButtons()
 {
 	//Start Point
 	float xStart = 100;
-<<<<<<< HEAD
 	float yStart = 190;
 
 	//Background
@@ -83,18 +83,6 @@ void AMyHUD::DrawMainMenuButtons()
 		SketchFont, "Resume", xStart + 25, yStart + 10,
 		FColorBlack, DefaultFontScale,
 		false
-=======
-	float yStart = 410;
-
-	//Background
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 220)); //alpha 120/255
-
-	//Text
-	DrawHUDText(
-		SketchFont, "Restart", xStart + 20, yStart + 20,
-		LC_Black, DefaultFontScale,
-		true
->>>>>>> origin/master
 		);
 
 	//Clear buttons with ButtonsMain.Empty()
@@ -113,20 +101,15 @@ void AMyHUD::DrawMainMenuButtons()
 
 
 	xStart = 100;
-<<<<<<< HEAD
 	yStart = 280;
 	DrawHUDRect(xStart - 10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
 	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
-=======
-	yStart = 510;
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 220)); //alpha 120/255
->>>>>>> origin/master
 
 	//Text
 	DrawHUDText(
 		SketchFont, "Exit", xStart + 45, yStart + 10,
 		FColorBlack, DefaultFontScale,
-		true, FColor_White
+		false
 		);
 
 	if (ButtonsMain.Num() < 2)
@@ -181,7 +164,7 @@ void AMyHUD::DrawConfirmButtons()
 	DrawHUDText(
 		SketchFont, "Yes", xStart + 30, yStart + 20,
 		*ColorPtr, DefaultFontScale,
-		true
+		true, LC_White
 		);
 
 	if (ButtonsConfirm.Num() < 1)
@@ -208,7 +191,7 @@ void AMyHUD::DrawConfirmButtons()
 	DrawHUDText(
 		SketchFont, "No", xStart + 30, yStart + 20,
 		*ColorPtr, DefaultFontScale,
-		true
+		true, LC_White
 		);
 
 	if (ButtonsConfirm.Num() < 2)
@@ -279,10 +262,10 @@ void AMyHUD::DrawHealthBar()
 	}
 
 	DrawHUDRect(100, 100, 20, 20, LC_Blue1);
-	DrawHUDRect(150, 100, 20, 20, LC_Blue2);
-	DrawHUDRect(200, 100, 20, 20, LC_Blue3);
-	DrawHUDRect(250, 100, 20, 20, LC_Blue4);
-	DrawHUDRect(300, 100, 20, 20, LC_Blue5);
+	DrawHUDRect(120, 100, 20, 20, LC_Blue2);
+	DrawHUDRect(140, 100, 20, 20, LC_Blue3);
+	DrawHUDRect(160, 100, 20, 20, LC_Blue4);
+	DrawHUDRect(180, 100, 20, 20, LC_Blue5);
 
 }
 
@@ -340,13 +323,13 @@ void AMyHUD::CheckCursorInButtonsMain()
 
 	if (ClickedButtonType == BUTTONTYPE_MAIN_RESTART)
 	{
-		GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
+		/*GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
 		GetWorldTimerManager().SetTimer(Handle2, 1.0f, false);
 		GetWorldTimerManager().SetTimer(Handle3, 1.0f, false);
 		GetWorldTimerManager().SetTimer(Handle4, 1.0f, false);
 		GetWorldTimerManager().PauseTimer(Handle2);
 		GetWorldTimerManager().PauseTimer(Handle3);
-		GetWorldTimerManager().PauseTimer(Handle4);
+		GetWorldTimerManager().PauseTimer(Handle4);*/
 		d1 = true, d2 = false, d3 = false, d4 = false;
 		gameover = false;
 		ThePC->ConsoleCommand("RestartLevel");
@@ -416,7 +399,7 @@ void AMyHUD::DrawHUD(){
 	if (j > 450){ */
 	if (d1){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle1) > 0)
-			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2 -70, Canvas->SizeY / 2 -50, SketchFont, 2.0F, false);
 		else {
 			GetWorldTimerManager().ClearTimer(Handle1);
 			d1 = false;
@@ -427,7 +410,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d2){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle2) > 0)
-			DrawText(TEXT("2"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("2"), FColor::Blue, Canvas->SizeX / 2-70, Canvas->SizeY / 2-50, SketchFont, 2.0F, false);
 		else{
 			GetWorldTimerManager().ClearTimer(Handle2);
 			d2 = false;
@@ -438,7 +421,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d3){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle3) > 0)
-			DrawText(TEXT("1"), FColor::Blue, Canvas->SizeX / 2, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("1"), FColor::Blue, Canvas->SizeX / 2-70, Canvas->SizeY / 2-50, SketchFont, 2.0F, false);
 		else{
 			GetWorldTimerManager().ClearTimer(Handle3);
 			d3 = false;
@@ -449,7 +432,7 @@ void AMyHUD::DrawHUD(){
 	}
 	if (d4){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle4) > 0)
-			DrawText(TEXT("GO!"), FColor::Blue, (Canvas->SizeX / 2)-5, Canvas->SizeY / 2, SketchFont, 2.0F, false);
+			DrawText(TEXT("GO!"), FColor::Blue, (Canvas->SizeX / 2)-95, Canvas->SizeY / 2-50, SketchFont, 2.0F, false);
 		else{
 			d4 = false;
 			GetWorldTimerManager().ClearTimer(Handle4);

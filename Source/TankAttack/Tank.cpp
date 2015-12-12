@@ -133,13 +133,8 @@ void ATank::MoveRight(float Value)
 
 void ATank::ToggleMenu(){
 	AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-	if (HUD->DontDrawHUD == true)
+	if (HUD->DontDrawHUD == true){
 		HUD->DontDrawHUD = false;
-<<<<<<< HEAD
 		HUD->ThePC->ConsoleCommand("Pause");
 	}
-=======
-	else
-		HUD->DontDrawHUD = true;
->>>>>>> origin/master
 }

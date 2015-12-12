@@ -2,7 +2,6 @@
 
 #include "TankAttack.h"
 #include "Bots.h"
-#include "Bot.h"
 
 //Global Variables
 ABot** bots;
@@ -16,6 +15,11 @@ ABots::ABots()
 	DummyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Dummy0"));
 	RootComponent = DummyRoot;
 
+	static ConstructorHelpers::FObjectFinder<UBlueprint> EnemyBot(TEXT("Blueprint'/Game/EnemyBot.EnemyBot'"));
+	if (EnemyBot.Object){
+		BotBlueprint = (UClass*)EnemyBot.Object->GeneratedClass;
+	}
+
 	BotSpawn = 3;
 }
 
@@ -28,12 +32,12 @@ void ABots::BeginPlay()
 	
 	for (int32 BotIndex = 0; BotIndex<BotSpawn; BotIndex++)
 	{
-		const float XOffset = (BotIndex / BotSpawn) * 240; // Divide by dimension
-		const float YOffset = (BotIndex%BotSpawn) * 197; // Modulo gives remainder
+		const float XOffset = (BotIndex / BotSpawn) * 300; // Divide by dimension
+		const float YOffset = (BotIndex%BotSpawn) * 600; // Modulo gives remainder
 
 		// Make postion vector, offset from Grid location
 		const FVector BotLocation = FVector(XOffset + 20, YOffset, 0.f) + GetActorLocation();
-		ABot *NewBot = GetWorld()->SpawnActor<ABot>(BotLocation, FRotator(0, 0, 0));
+		ABot *NewBot = GetWorld()->SpawnActor<ABot>(BotBlueprint, BotLocation, FRotator(0, 0, 0));
 
 		bots[BotIndex] = NewBot;
 	}

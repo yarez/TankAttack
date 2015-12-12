@@ -95,8 +95,9 @@ void ABotController::SearchForEnemy()
 
 void ABotController::SetEnemy(class APawn* InPawn)
 {
+	FVector random = InPawn->GetActorLocation() + (rand() % 50) + 2;
 	BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
-	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation()*.5);
+	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation());
 }
 
 

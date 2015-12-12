@@ -3,8 +3,9 @@
 #include "TankAttack.h"
 #include "MyHUD.h"
 
-#define BUTTONTYPE_MAIN_RESTART 	1
+#define BUTTONTYPE_MAIN_RESTART 	3
 #define BUTTONTYPE_MAIN_EXIT 		2
+#define BUTTONTYPE_MAIN_RESUME		1
 
 #define BUTTONTYPE_CONFIRM_YES 	1
 #define BUTTONTYPE_CONFIRM_NO 	2
@@ -71,15 +72,15 @@ void AMyHUD::DrawMainMenuButtons()
 {
 	//Start Point
 	float xStart = 100;
-	float yStart = 200;
+	float yStart = 190;
 
 	//Background
-	DrawHUDRect(xStart-10, yStart - 10, 170, 100, FLinearColor(0, 0, 0, 1));
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 255)); //alpha 120/255
+	DrawHUDRect(xStart-10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
 
 	//Text
 	DrawHUDText(
-		SketchFont, "Restart", xStart + 20, yStart + 20,
+		SketchFont, "Resume", xStart + 25, yStart + 10,
 		FColorBlack, DefaultFontScale,
 		false
 		);
@@ -88,7 +89,7 @@ void AMyHUD::DrawMainMenuButtons()
 	if (ButtonsMain.Num() < 1)
 	{
 		FHUDButtonStruct newButton = FHUDButtonStruct();
-		newButton.type = BUTTONTYPE_MAIN_RESTART;
+		newButton.type = BUTTONTYPE_MAIN_RESUME;
 		newButton.minX = xStart;
 		newButton.maxX = xStart + 150;
 		newButton.minY = yStart;
@@ -100,13 +101,13 @@ void AMyHUD::DrawMainMenuButtons()
 
 
 	xStart = 100;
-	yStart = 290;
-	DrawHUDRect(xStart - 10, yStart - 10, 170, 100, FLinearColor(0, 0, 0, 1));
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 80, FColor(255, 255, 255, 255)); //alpha 120/255
+	yStart = 280;
+	DrawHUDRect(xStart - 10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
 
 	//Text
 	DrawHUDText(
-		SketchFont, "Exit", xStart + 45, yStart + 20,
+		SketchFont, "Exit", xStart + 45, yStart + 10,
 		FColorBlack, DefaultFontScale,
 		false
 		);
@@ -123,6 +124,32 @@ void AMyHUD::DrawMainMenuButtons()
 		//Add to correct array
 		ButtonsMain.Add(newButton);
 	}
+
+	xStart = 100;
+	yStart = 370; 
+	DrawHUDRect(xStart - 10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
+
+	//Text
+	DrawHUDText(
+		SketchFont, "Restart", xStart + 23, yStart + 10,
+		FColorBlack, DefaultFontScale,
+		false
+		);
+
+	if (ButtonsMain.Num() < 3)
+	{
+		FHUDButtonStruct newButton = FHUDButtonStruct();
+		newButton.type = BUTTONTYPE_MAIN_RESTART;
+		newButton.minX = xStart;
+		newButton.maxX = xStart + 150;
+		newButton.minY = yStart;
+		newButton.maxY = yStart + 80;
+
+		//Add to correct array
+		ButtonsMain.Add(newButton);
+	}
+
 }
 void AMyHUD::DrawConfirmButtons()
 {
@@ -296,12 +323,28 @@ void AMyHUD::CheckCursorInButtonsMain()
 
 	if (ClickedButtonType == BUTTONTYPE_MAIN_RESTART)
 	{
+		GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
+		GetWorldTimerManager().SetTimer(Handle2, 1.0f, false);
+		GetWorldTimerManager().SetTimer(Handle3, 1.0f, false);
+		GetWorldTimerManager().SetTimer(Handle4, 1.0f, false);
+		GetWorldTimerManager().PauseTimer(Handle2);
+		GetWorldTimerManager().PauseTimer(Handle3);
+		GetWorldTimerManager().PauseTimer(Handle4);
+		d1 = true, d2 = false, d3 = false, d4 = false;
+		gameover = false;
 		ThePC->ConsoleCommand("RestartLevel");
+		
 		return;
 	}
 	if (ClickedButtonType == BUTTONTYPE_MAIN_EXIT)
 	{
 		ConfirmDialogOpen = true;
+		return;
+	}
+	if (ClickedButtonType == BUTTONTYPE_MAIN_RESUME)
+	{
+		ThePC->ConsoleCommand("Pause");
+		DontDrawHUD = true; 
 		return;
 	}
 }
@@ -361,7 +404,8 @@ void AMyHUD::DrawHUD(){
 			GetWorldTimerManager().ClearTimer(Handle1);
 			d1 = false;
 			d2 = true;
-			GetWorldTimerManager().UnPauseTimer(Handle2);
+			GetWorldTimerManager().SetTimer(Handle2, 1.0f, false);
+			//GetWorldTimerManager().UnPauseTimer(Handle2);
 		}
 	}
 	if (d2){
@@ -371,7 +415,8 @@ void AMyHUD::DrawHUD(){
 			GetWorldTimerManager().ClearTimer(Handle2);
 			d2 = false;
 			d3 = true;
-			GetWorldTimerManager().UnPauseTimer(Handle3);
+			GetWorldTimerManager().SetTimer(Handle3, 1.0f, false);
+			//GetWorldTimerManager().UnPauseTimer(Handle3);
 		}
 	}
 	if (d3){
@@ -381,7 +426,8 @@ void AMyHUD::DrawHUD(){
 			GetWorldTimerManager().ClearTimer(Handle3);
 			d3 = false;
 			d4 = true;
-			GetWorldTimerManager().UnPauseTimer(Handle4);
+			GetWorldTimerManager().SetTimer(Handle4, 1.0f, false);
+			//GetWorldTimerManager().UnPauseTimer(Handle4);
 		}
 	}
 	if (d4){
@@ -445,13 +491,12 @@ void AMyHUD::BeginPlay()
 	GetWorldTimerManager().SetTimer(Handle3, this, &AMyHUD::Draw, 10.0f, false);
 	GetWorldTimerManager().SetTimer(Handle4, this, &AMyHUD::Draw, 10.0f, false);*/
 	GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
-	GetWorldTimerManager().SetTimer(Handle2, 1.0f, false);
-	GetWorldTimerManager().SetTimer(Handle3, 1.0f, false);
-	GetWorldTimerManager().SetTimer(Handle4, 1.0f, false);
-	GetWorldTimerManager().PauseTimer(Handle2);
-	GetWorldTimerManager().PauseTimer(Handle3);
-	GetWorldTimerManager().PauseTimer(Handle4);
+	//GetWorldTimerManager().PauseTimer(Handle2);
+	//GetWorldTimerManager().PauseTimer(Handle3);
+	//GetWorldTimerManager().PauseTimer(Handle4);
 	d1 = true, d2 = false, d3 = false, d4 = false;
+	gameover = false; 
+
 	//Create tick to display remaining time and possibly pause the time until the begin has made it off the screen
 	//Destroy the actor when the time runs out with a bool that connects to the actor class from here 
 	//in actor fix the calling of the function in block to switch the colors of the breadcrumbs 

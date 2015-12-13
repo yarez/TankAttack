@@ -54,11 +54,14 @@ void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse,
 			if (ThisWall->canBreak){
 				ThisWall->hits++;
 				if (ThisWall->hits >= 2){
-					ThisWall->SetActorHiddenInGame(false);
+					ThisWall->SetActorHiddenInGame(true);
 					ThisWall->SetActorEnableCollision(false);
 				}
 			}
 			
+		}
+		else if (otherActor->GetActorLabel().Contains(TEXT("Bot"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
+			otherActor->Destroy();
 		}
 
 		/*APill* PillHit = Cast<APill>(otherActor);

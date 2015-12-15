@@ -1,3 +1,10 @@
+/*
+	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+	Date: 12-12-2015
+
+	This is the header file for the Health Pack class.
+*/
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAttack.h"
@@ -6,6 +13,7 @@
 #include "Wall.h"
 #include "Bot.h"
 #include "MyHUD.h"
+#include "HealthPack.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 AShell::AShell()
@@ -38,9 +46,7 @@ AShell::AShell()
 
 void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
-	
 	if (GEngine){
-		GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm hitting somethin! ");
 		if (otherActor->GetActorLabel().Contains(TEXT("Wall"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
 			AWall* ThisWall = Cast<AWall>(otherActor);
 			//FVector newDir = this->GetVelocity();
@@ -60,47 +66,29 @@ void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse,
 			}
 			
 		}
+
 		else if (otherActor->GetActorLabel().Contains(TEXT("Bot"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			otherActor->Destroy();
-		}
-
-		/*APill* PillHit = Cast<APill>(otherActor);
-		//AMyHUD*	HUD = Cast<AMyHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
-		AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-		if (otherActor->GetActorLabel().Contains(TEXT("Tank"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			otherActor->SetActorHiddenInGame(true);
-			otherActor->SetActorEnableCollision(false);
-
-			if (PillHit->isWhite)
-				invPills++;
-			else if (PillHit->isRed){
-				GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Red, "Ouch! "); //Detract Time
-				HUD->sub5();
+			ABot* ThisBot = Cast<ABot>(otherActor);
+			ThisBot->hits += 1;
+			if (ThisBot->hits >= 3){
+				otherActor->Destroy();
 			}
-			else if (PillHit->isBlue){
-				GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "Refreshing! "); //Add Time
-				HUD->add5();
-			}
-		}
-		
-		AWall* WallHit = Cast<AWall>(otherActor);
-		if (otherActor->GetActorLabel().Contains(TEXT("Health"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			WallActor = otherActor;
+			this->Destroy();
 		}
 
-		if (otherActor->GetActorLabel().Contains(TEXT("Bot"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
-			AMyHUD* HUD2 = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-			if (invPills < 20)
-				HUD2->NoWinDraw();
-			//GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Red, "Sorry! Not enough pills! Go find me some more! ");
-			else
-				HUD2->WinDraw();
-			//GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "YOU'RE CURED! YAY");
+		else if(otherActor->GetActorLabel().Contains(TEXT("Tank"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
+			AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+			HUD->LoseHealth();
+			this->Destroy();
+		}
 
-		}*/
-
-
+		else if (otherActor->GetActorLabel().Contains(TEXT("HealthPack"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
+			AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+			HUD->AddHealth();
+			AHealthPack* ThisPack = Cast<AHealthPack>(otherActor);
+			ThisPack->SetActorHiddenInGame(true);
+			ThisPack->SetActorEnableCollision(false);
+			this->Destroy();
+		}
 	}
 }
-
-

@@ -1,6 +1,14 @@
+/*
+	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+	Date: 12-12-2015
+
+	This is the header file for the Health Pack class.
+*/
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAttack.h"
+#include "Tank.h"
 #include "BotController.h"
 #include "Bot.h"
 #include "MyHUD.h"
@@ -100,11 +108,12 @@ void ABotController::SetEnemy(class APawn* InPawn)
 	BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation());
 
-	ABot* BotControlled = Cast<ABot>(GetPawn());
+	ABot* ThisBot = Cast<ABot>(GetPawn());
+	ATank *Enemy = Cast<ATank>(this->BestPawn);
 	FVector dir;
-	dir = InPawn->GetActorLocation() - BotControlled->GetActorLocation();
+	dir = Enemy->GetActorLocation() - ThisBot->GetActorLocation();
 	dir = dir.GetSafeNormal(1.0f) * 1000;
-	BotControlled->Direction = FVector(dir.X, dir.Y, 0.f);
+	ThisBot->Direction = FVector(dir.X, dir.Y, 0.f);
 }
 
 

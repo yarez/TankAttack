@@ -1,3 +1,10 @@
+/*
+	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+	Date: 12-12-2015
+
+	This is the header file for the Health Pack class.
+*/
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAttack.h"
@@ -32,31 +39,18 @@ void ABot::BeginPlay()
 
 void ABot::BotOnFire()
 {
-	// try and fire a projectile
-	//if (ProjectileClass != NULL)
-	//{
-	//if (bCanFire)
-	//{
 
 	GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm spawning ");
 
 		const FRotator SpawnRotation = GetControlRotation();
-		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-		//const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
 		const FVector SpawnLocation = BotTurret->GetSocketLocation("GunSocket");
 
 		AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
-		ATank *Enemy = Cast<ABotController>(Controller)->BestPawn;
 		NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
 	
 
 		//bCanFire = false;
 		//GetWorld()->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABot::ShotTimerExpired, 1.f);
-
-		// spawn the projectile at the muzzle
-		//World->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
-
-	//}
 
 }
 

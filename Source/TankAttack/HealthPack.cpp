@@ -1,3 +1,10 @@
+/*
+	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+	Date: 12-12-2015
+
+	This is the cpp file for the Health Pack class. It sets the initial scale and relative location of the Healthpack mesh.
+*/
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAttack.h"

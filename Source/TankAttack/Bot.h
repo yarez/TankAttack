@@ -1,3 +1,10 @@
+/*
+	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+	Date: 12-12-2015
+
+	This is the header file for the Health Pack class.
+*/
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
@@ -16,6 +23,8 @@ public:
 	void BotOnFire();
 
 	void ShotTimerExpired();
+
+	int hits = 0;
 
 	FVector Direction;
 

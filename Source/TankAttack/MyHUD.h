@@ -1,4 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/*
+Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+Date: 12-12-2015
+
+This is the header file for the MyHUD class.
+*/
 
 #pragma once
 
@@ -10,6 +15,7 @@
  */
 
 
+//Defines the struct for the buttons
 USTRUCT()
 struct FHUDButtonStruct
 {
@@ -40,7 +46,7 @@ UCLASS()
 class TANKATTACK_API AMyHUD : public AHUD
 {
 	GENERATED_UCLASS_BODY()
-
+		//Sets up fonts for game
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MyHUD)
 		UFont* ToyFont;
 
@@ -64,36 +70,42 @@ class TANKATTACK_API AMyHUD : public AHUD
 		bool DontDrawHUD;
 
 public:
+	//Location of the mouse in order to know if mouse is in button
 	FVector2D MouseLocation;
 
 	//Buttons
 	TArray<FHUDButtonStruct> ButtonsMain;
 	TArray<FHUDButtonStruct> ButtonsConfirm;
 
-	//Cursor In buttons
+	//Check if Cursor In buttons
 	void DrawHUD_CheckCursorInButtons();
 	void CheckCursorInButtonsMain();
 	void CheckCursorInButtonsConfirm();
 	const FHUDButtonStruct* CurCheckButton;
 	int32 CheckCursorInButton(const TArray<FHUDButtonStruct>& ButtonArray);
 	int32 ClickedButtonType;
+
 	//States
 	bool ConfirmDialogOpen;
 	bool InMainMenu;
 	bool canMove = false; 
 
 	int32 		ActiveButton_Type;
+
+	//Colors
 	FLinearColor LC_Blue1 = FLinearColor(0, 0, 1, 1);
 	FLinearColor LC_Blue2 = FLinearColor(0, 0, 1, 1);
 	FLinearColor LC_Blue3 = FLinearColor(0, 0, 1, 1);
 	FLinearColor LC_Blue4 = FLinearColor(0, 0, 1, 1);
 	FLinearColor LC_Blue5 = FLinearColor(0, 0, 1, 1);
-	bool add = false, lose = false; 
 
+	//Bool for add health and lose health
+	bool add = false, lose = false; 
+	//Check if cursor is hovering over button
 	bool CursorHoveringInButton;
+
 	//Colors
 	const FLinearColor * ColorPtr;
-	//Colors
 	static const FColor		FColorBlack;
 	static const FColor		FColorRed;
 	static const FColor		FColorYellow;
@@ -105,6 +117,7 @@ public:
 	static const FLinearColor LC_Yellow;
 	static const FLinearColor LC_White;
 
+	//Define the DrawHUDRect function for drawing rectangles
 	FORCEINLINE void DrawHUDRect(
 		float X, float Y,
 		float Width, float Height,
@@ -123,7 +136,7 @@ public:
 		Canvas->DrawItem(RectItem);
 	}
 
-	//DrawText
+	//Define DrawHUDText function for drawing text
 	FORCEINLINE void DrawHUDText(
 		UFont*	TheFont,
 		const FString& TheStr,
@@ -154,6 +167,7 @@ public:
 		Canvas->DrawItem(NewText);
 	}
 
+	//Define VDrawTile for drawing rectangles with texture
 	FORCEINLINE void VDrawTile(UTexture2D* tex, float x, float y, float screenX, float screenY, const FColor& TheColor)
 	{
 		if (!Canvas) return;
@@ -173,7 +187,7 @@ public:
 			);
 	}
 
-
+	
 	void DrawHUD_DrawDialogs();
 
 	//Menus
@@ -189,19 +203,16 @@ public:
 	//Draw HUD
 	void DrawHUD_Reset();
 	AMyHUD();
+	//boolean values for gameover and if the game has begun
 	bool gameover = false, begun = false, win = false, nowin = false;
 	float t;
-	int32 min, sec;
+	//Handles for the timers used
 	FTimerHandle Handle1, Handle2, Handle3, Handle4, Handle5;
 	void AddHealth();
 	void LoseHealth();
+	float x = 330, y = 75;
 	bool d1 = false,d2 = false,d3 =false,d4=false,d5= true;
-	//AMyHUD(const class FObjectInitializer &PCIP);
-	UFont *HUDFont;
 	virtual void BeginPlay() override;
-	int i = 400, j = 200;
-	int nw = 200;
-	float x = 300, y = 70;
 	virtual void DrawHUD() override;
 	virtual void Tick(float DeltaTime) override;
 	void Draw();

@@ -1,8 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/*
+Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+Date: 12-12-2015
+
+This is the cpp file for the MyHUD class.
+*/
 
 #include "TankAttack.h"
 #include "MyHUD.h"
 
+//Define numbers for several button types
 #define BUTTONTYPE_MAIN_RESTART 	3
 #define BUTTONTYPE_MAIN_EXIT 		2
 #define BUTTONTYPE_MAIN_RESUME		1
@@ -12,6 +18,7 @@
 
 #define CANVAS_WHITE if(Canvas) Canvas->SetDrawColor(FColor_White);
 
+//Creates some const colors for use in the hud 
 const FColor AMyHUD::FColorBlack = FColor(0, 0, 0, 255);
 const FColor AMyHUD::FColorRed = FColor(255, 0, 0, 255);
 const FColor AMyHUD::FColorYellow = FColor(255, 255, 0, 255);
@@ -43,10 +50,14 @@ AMyHUD::AMyHUD(const class FObjectInitializer &PCIP) :Super(PCIP){
 }
 
 void AMyHUD::AddHealth(){
+	//Gets called when a health pack is hit to set the add to true 
+	//for use in the drawhud
 	add = true;
 }
 
 void AMyHUD::LoseHealth(){
+	//Gets called the player is hit to set the lose to true
+	//for use in the drawhud
 	lose = true;
 }
 
@@ -59,7 +70,7 @@ void AMyHUD::DrawHUD_DrawDialogs()
 
 void AMyHUD::DrawConfirm()
 {
-	//Blue rect with alpha 50%
+	//Black rect with white border around it
 	DrawHUDRect(Canvas->SizeX / 2 - 100, Canvas->SizeY / 2 - 60, 220, 120, FLinearColor(1, 1, 1, 1));
 	DrawHUDRect(Canvas->SizeX / 2 - 90, Canvas->SizeY / 2 - 50, 200, 100, FLinearColor(0, 0, 0, 1));
 
@@ -75,10 +86,11 @@ void AMyHUD::DrawMainMenuButtons()
 	float yStart = 190;
 
 	//Background
+	//Tile imported into content browser with black border
 	DrawHUDRect(xStart-10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
 	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
 
-	//Text
+	//Resume Text for Menu
 	DrawHUDText(
 		SketchFont, "Resume", xStart + 25, yStart + 10,
 		FColorBlack, DefaultFontScale,
@@ -86,6 +98,7 @@ void AMyHUD::DrawMainMenuButtons()
 		);
 
 	//Clear buttons with ButtonsMain.Empty()
+	//Sets up the info for the button with the struct
 	if (ButtonsMain.Num() < 1)
 	{
 		FHUDButtonStruct newButton = FHUDButtonStruct();
@@ -99,19 +112,22 @@ void AMyHUD::DrawMainMenuButtons()
 		ButtonsMain.Add(newButton);
 	}
 
-
+	//Start Point
 	xStart = 100;
 	yStart = 280;
+	//Background
+	//Tile imported into content browser with black border
 	DrawHUDRect(xStart - 10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
+	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); 
 
-	//Text
+	//Exit Text
 	DrawHUDText(
 		SketchFont, "Exit", xStart + 45, yStart + 10,
 		FColorBlack, DefaultFontScale,
 		false
 		);
 
+	//Sets up the info for the button with the struct
 	if (ButtonsMain.Num() < 2)
 	{
 		FHUDButtonStruct newButton = FHUDButtonStruct();
@@ -125,18 +141,23 @@ void AMyHUD::DrawMainMenuButtons()
 		ButtonsMain.Add(newButton);
 	}
 
+	//Start Point
 	xStart = 100;
 	yStart = 370; 
+
+	//Background
+	//Tile imported into content browser with black border
 	DrawHUDRect(xStart - 10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
 	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
 
-	//Text
+	//Restart Text
 	DrawHUDText(
 		SketchFont, "Restart", xStart + 23, yStart + 10,
 		FColorBlack, DefaultFontScale,
 		false
 		);
 
+	//Sets up the info for the button with the struct
 	if (ButtonsMain.Num() < 3)
 	{
 		FHUDButtonStruct newButton = FHUDButtonStruct();
@@ -153,6 +174,7 @@ void AMyHUD::DrawMainMenuButtons()
 }
 void AMyHUD::DrawConfirmButtons()
 {
+	//Start Point
 	float xStart = Canvas->SizeX / 2 - 100;
 	float yStart = Canvas->SizeY / 2 - 40;
 
@@ -160,13 +182,14 @@ void AMyHUD::DrawConfirmButtons()
 	if (ActiveButton_Type == BUTTONTYPE_CONFIRM_YES) ColorPtr = &LC_Red;
 	else ColorPtr = &LC_White;
 
-	//Text
+	//Yes Text
 	DrawHUDText(
 		SketchFont, "Yes", xStart + 30, yStart + 20,
 		*ColorPtr, DefaultFontScale,
 		true, LC_White
 		);
 
+	//Sets up the info for the button with the struct
 	if (ButtonsConfirm.Num() < 1)
 	{
 		FHUDButtonStruct newButton = FHUDButtonStruct();
@@ -180,6 +203,7 @@ void AMyHUD::DrawConfirmButtons()
 		ButtonsConfirm.Add(newButton);
 	}
 
+	//Start Point
 	xStart = Canvas->SizeX / 2 + 20;
 	yStart = Canvas->SizeY / 2 - 40;
 
@@ -187,13 +211,14 @@ void AMyHUD::DrawConfirmButtons()
 	if (ActiveButton_Type == BUTTONTYPE_CONFIRM_NO) ColorPtr = &LC_Red;
 	else ColorPtr = &LC_White;
 
-	//Text
+	//No Text
 	DrawHUDText(
 		SketchFont, "No", xStart + 30, yStart + 20,
 		*ColorPtr, DefaultFontScale,
 		true, LC_White
 		);
 
+	//Sets up the info for the button with the struct
 	if (ButtonsConfirm.Num() < 2)
 	{
 		FHUDButtonStruct newButton = FHUDButtonStruct();
@@ -210,19 +235,22 @@ void AMyHUD::DrawConfirmButtons()
 
 void AMyHUD::DrawHealthBar()
 {
+	//Health Text
 	DrawHUDText(
 		ToyFont, "Health", 100, 50,
 		FColor_White, DefaultFontScale,
 		true
 		);
 
+	//Tank Attack Text at the top of the screen
 	DrawHUDText(
 		ToyFont, "Tank Attack", 290, 20,
 		FColor_White, 1.0F,
 		true
 		);
 
-	//Goes from left to right
+	//Goes from left to right incrementing the health
+	//when add is true and it is not gameover
 	if (add && !gameover){
 		if (LC_Blue2.A == 0){
 			LC_Blue2.A = 1;
@@ -243,6 +271,7 @@ void AMyHUD::DrawHealthBar()
 
 	}
 
+	//when lose is true it decrements health
 	if (lose){
 		if (LC_Blue5.A == 1){
 			LC_Blue5.A = 0;
@@ -267,6 +296,8 @@ void AMyHUD::DrawHealthBar()
 		}
 	}
 
+
+	//Draws the squares for the health bar
 	DrawHUDRect(100, 100, 20, 20, LC_Blue1);
 	DrawHUDRect(120, 100, 20, 20, LC_Blue2);
 	DrawHUDRect(140, 100, 20, 20, LC_Blue3);
@@ -310,6 +341,7 @@ void AMyHUD::CheckCursorInButtonsConfirm()
 
 	if (ClickedButtonType == BUTTONTYPE_CONFIRM_YES)
 	{
+		//Exits game
 		ThePC->ConsoleCommand("Exit");
 		return;
 	}
@@ -329,31 +361,28 @@ void AMyHUD::CheckCursorInButtonsMain()
 
 	if (ClickedButtonType == BUTTONTYPE_MAIN_RESTART)
 	{
-		/*GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
-		GetWorldTimerManager().SetTimer(Handle2, 1.0f, false);
-		GetWorldTimerManager().SetTimer(Handle3, 1.0f, false);
-		GetWorldTimerManager().SetTimer(Handle4, 1.0f, false);
-		GetWorldTimerManager().PauseTimer(Handle2);
-		GetWorldTimerManager().PauseTimer(Handle3);
-		GetWorldTimerManager().PauseTimer(Handle4);*/
+		//Restarts the level and resets information so everything redisplays on hud
 		d1 = true, d2 = false, d3 = false, d4 = false;
 		gameover = false;
 		ThePC->ConsoleCommand("RestartLevel");
-		
 		return;
 	}
 	if (ClickedButtonType == BUTTONTYPE_MAIN_EXIT)
 	{
+		//Turns on the confirm buttons
 		ConfirmDialogOpen = true;
 		return;
 	}
 	if (ClickedButtonType == BUTTONTYPE_MAIN_RESUME)
 	{
+		//Unpauses the game when resume is selected
 		ThePC->ConsoleCommand("Pause");
 		DontDrawHUD = true; 
 		return;
 	}
 }
+
+//Check cursor
 void AMyHUD::DrawHUD_CheckCursorInButtons()
 {
 	if (ConfirmDialogOpen)
@@ -366,11 +395,14 @@ void AMyHUD::DrawHUD_CheckCursorInButtons()
 	CheckCursorInButtonsMain();
 }
 
+//Resets infomation after each tick
 void AMyHUD::DrawHUD_Reset()
 {
 	ActiveButton_Type = -1;
 	CursorHoveringInButton = false;
 }
+
+//DrawHUD gets called every tick
 void AMyHUD::DrawHUD(){
 
 	//Have PC for Mouse Cursor?
@@ -385,11 +417,14 @@ void AMyHUD::DrawHUD(){
 	//Display the Cursor
 	ThePC->bShowMouseCursor = true;
 
+	//Health Bar is always drawn on screen
 	DrawHealthBar();
 
 
 	FVector2D ScreenSize = FVector2D(Canvas->SizeX, Canvas->SizeY);
 	Super::DrawHUD();
+
+	//Display the instructions for until the timer hits zero
 	if (d5){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle5) > 0){
 			DrawHUDText(ToyFont, "Controls:", x, y, FColorRed, 1.0F,true);
@@ -402,16 +437,6 @@ void AMyHUD::DrawHUD(){
 			DrawHUDText(ToyFont, "Goal:", x, y+200, FColorRed, 1.0F, true);
 			DrawHUDText(SketchFont, "Destroy every enemy", x, y+243, FColorRed, .5F, true,LC_Red);
 			DrawHUDText(SketchFont, "Be the sole survivor", x, y+263, FColorRed, .5F, true,LC_Red);
-			/*DrawText(TEXT("Controls:"), FColor::Red, x, y, ToyFont, 1.0F, false);
-			DrawText(TEXT("WASD to Move"), FColor::Red, x, y + 40, SketchFont, .5F, false);
-			DrawText(TEXT("Mouse to aim"), FColor::Red, x, y + 60, SketchFont, .5F, false);
-			DrawText(TEXT("Click to shoot"), FColor::Red, x, y + 80, SketchFont, .5F, false);
-			DrawText(TEXT("Some walls are breakable"), FColor::Red, x, y + 100, SketchFont, .5F, false);
-			DrawText(TEXT("Press M for Menu"), FColor::Red, x, y + 120, SketchFont, .5F, false);
-			DrawText(TEXT("-----------------"), FColor::Red, x, y + 160, ToyFont, .5F, false);
-			DrawText(TEXT("Goal:"), FColor::Red, x, y + 200, ToyFont, 1.0F, false);
-			DrawText(TEXT("Destroy all enemies"), FColor::Red, x, y + 240, SketchFont, .5F, false);
-			DrawText(TEXT("Be the last one standing"), FColor::Red, x, y + 260, SketchFont, .5F, false);*/
 		}
 		else {
 			GetWorldTimerManager().ClearTimer(Handle5);
@@ -420,7 +445,7 @@ void AMyHUD::DrawHUD(){
 			GetWorldTimerManager().SetTimer(Handle1, 1.0f, false);
 		}
 	}
-
+	//When the instructions are finished display 3,2,1, Go! on the screen based on timers
 	if (d1){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle1) > 0)
 			DrawText(TEXT("3"), FColor::Blue, Canvas->SizeX / 2 -70, Canvas->SizeY / 2 -50, SketchFont, 2.0F, false);
@@ -429,7 +454,6 @@ void AMyHUD::DrawHUD(){
 			d1 = false;
 			d2 = true;
 			GetWorldTimerManager().SetTimer(Handle2, 1.0f, false);
-			//GetWorldTimerManager().UnPauseTimer(Handle2);
 		}
 	}
 	if (d2){
@@ -440,7 +464,6 @@ void AMyHUD::DrawHUD(){
 			d2 = false;
 			d3 = true;
 			GetWorldTimerManager().SetTimer(Handle3, 1.0f, false);
-			//GetWorldTimerManager().UnPauseTimer(Handle3);
 		}
 	}
 	if (d3){
@@ -451,12 +474,11 @@ void AMyHUD::DrawHUD(){
 			d3 = false;
 			d4 = true;
 			GetWorldTimerManager().SetTimer(Handle4, 1.0f, false);
-			//GetWorldTimerManager().UnPauseTimer(Handle4);
 		}
 	}
 	if (d4){
 		if (GetWorldTimerManager().GetTimerRemaining(Handle4) > 0)
-			DrawText(TEXT("GO!"), FColor::Blue, (Canvas->SizeX / 2)-95, Canvas->SizeY / 2-50, SketchFont, 2.0F, false);
+			DrawText(TEXT("GO!"), FColor::Blue, (Canvas->SizeX / 2)-95, (Canvas->SizeY / 2)-50, SketchFont, 2.0F, false);
 		else{
 			d4 = false;
 			GetWorldTimerManager().ClearTimer(Handle4);
@@ -464,7 +486,12 @@ void AMyHUD::DrawHUD(){
 		}
 	}
 
+	//gameover text when gameover is reached
+	if(gameover)
+		DrawText(TEXT("GAME OVER"), FColor::Red, (Canvas->SizeX / 2)-250, (Canvas->SizeY / 2)-50, ToyFont, 2.0F, false);
+
 	//Draw HUD?
+	//DrawHUD is only turned on when the menu button is pressed
 	if (DontDrawHUD) return;
 
 	//Super
@@ -488,42 +515,17 @@ void AMyHUD::DrawHUD(){
 	//}
 		
 
-	/*if (gameover)
-		DrawText(TEXT("GAME OVER"), FColor::Black, 350, 200, HUDFont, 3.0F, false);
-	if (win){
-		DrawText(TEXT("YOU'RE CURED"), FColor::Black, 350, 200, HUDFont, 3.0F, false);
-		//GetWorldTimerManager().PauseTimer(Handle);
-	}
-	if (nowin){
-		nw -= .3;
-		DrawText(TEXT("Need more pills"), FColor::Black, 350, nw, HUDFont, 3.0F, false);
 
-	}
-	if (nw < -50)
-		nowin = false;*/
-	/*if ((y + 240) < -50){
-		DrawText(TEXT("Begin Your Quest"), FColor::White, i, j, HUDFont, 2.0F, false);
-		i += 2;
-		j += 2;
-	}*/
+	
 }
 void AMyHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	/*GetWorldTimerManager().SetTimer(Handle1, this, &AMyHUD::Draw, 10.0f, false);
-	GetWorldTimerManager().SetTimer(Handle2, this, &AMyHUD::Draw, 10.0f, false);
-	GetWorldTimerManager().SetTimer(Handle3, this, &AMyHUD::Draw, 10.0f, false);
-	GetWorldTimerManager().SetTimer(Handle4, this, &AMyHUD::Draw, 10.0f, false);*/
+
+	//Start the timer for the instructions as soon as you begin
 	GetWorldTimerManager().SetTimer(Handle5, 13.0f, false);
-	//GetWorldTimerManager().PauseTimer(Handle2);
-	//GetWorldTimerManager().PauseTimer(Handle3);
-	//GetWorldTimerManager().PauseTimer(Handle4);
 	d1 = false, d2 = false, d3 = false, d4 = false, d5 = true;
 	gameover = false; 
-
-	//Create tick to display remaining time and possibly pause the time until the begin has made it off the screen
-	//Destroy the actor when the time runs out with a bool that connects to the actor class from here 
-	//in actor fix the calling of the function in block to switch the colors of the breadcrumbs 
 }
 void AMyHUD::Draw(){
 	gameover = true;
@@ -545,8 +547,6 @@ void AMyHUD::NoWinDraw(){
 
 void AMyHUD::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
-	//t = GetWorldTimerManager().GetTimerRemaining(Handle);
-
 }
 
 

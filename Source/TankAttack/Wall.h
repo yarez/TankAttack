@@ -2,10 +2,8 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the header file for the Health Pack class.
+	This is the header file for the Wall class.
 */
-
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -29,11 +27,15 @@ public:
 	// Sets default values for this actor's properties
 	AWall();
 
+	//Boolean values that include the orientation of the wall
+	//if the wall is going to be drawn, if it is an inner wall
+	//and if it can be broken
 	bool drawit, innerw, orientation, canBreak;
 	//bool movRight, movLeft, alreadymoving;
+	//Variables used with disjoint sets
 	int cella, cellb;
 	//int steps;
-	
+	//How many hits the wall has received
 	int hits;
 
 	/** Pointer to Breakable material used on walls that can break*/
@@ -42,9 +44,6 @@ public:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	//Assigns the wall a direction to move
-	//void MoveWall(bool direction);
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;

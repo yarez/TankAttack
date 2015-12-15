@@ -113,9 +113,7 @@ void AMaze::BeginPlay()
 		walls[BlockIndex + NumH] = NewWall;
 	}
 
-	//openexit = false;
 	RemoveWalls();
-	//RemoveExit();
 
 }
 
@@ -161,10 +159,6 @@ void AMaze::RemoveWalls(void)
 			totalsets--;
 		}
 	}
-
-	//Randomly generates entrance to maze
-	//wallID = rand() % 9;
-	//walls[wallID]->drawit = false;
 
 	//Keeps track of only the walls to be drawn into the scene
 	for (int i = 0; i < NumH + NumV; i++){

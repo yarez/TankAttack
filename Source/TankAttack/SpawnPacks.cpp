@@ -2,7 +2,7 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the header file for the Health Pack class.
+	This is the cpp file for the Spawn Packs class which places the health packs in the scene.
 */
 
 // Fill out your copyright notice in the Description page of Project Settings.
@@ -23,6 +23,7 @@ ASpawnPacks::ASpawnPacks()
 	DummyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Dummy0"));
 	RootComponent = DummyRoot;
 
+	//Size based on the 10x10 maze grid spawned
 	Size = 10;
 	PackSpacing = 240.f;
 }
@@ -32,10 +33,8 @@ void ASpawnPacks::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Sets 3 health packs into the scene
 	int32 NumPacks = 3;
-	int randomX = 0;
-	int randomY = 0;
-	int randomC = 0;
 
 	for (int32 PackIndex = 0; PackIndex<NumPacks; PackIndex++){
 		const float XOffset = (PackIndex / Size) * PackSpacing; // Divide by dimension
@@ -44,21 +43,11 @@ void ASpawnPacks::BeginPlay()
 		// Make postion vector, offset from Grid location
 		const FVector PackLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
 
-		// Spawn a Pill
+		// Spawn a Health Pack
 		AHealthPack* NewPack = GetWorld()->SpawnActor<AHealthPack>(PackLocation, FRotator(0, 0, 0));
 
 		HPacks[PackIndex] = NewPack;
 	}
-
-/*	for (int x = 0; x < (Size*Size) / 2; x++){
-		do{
-			randomX = rand() % 9;
-			randomY = rand() % 9;
-		} while (Pills[randomX][randomY]->bHidden);
-
-		Pills[randomX][randomY]->SetActorHiddenInGame(true);
-		Pills[randomX][randomY]->SetActorEnableCollision(false);
-	}*/
 
 }
 

@@ -2,7 +2,9 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the header file for the Health Pack class.
+	This is the cpp file for the Shell class for the projectiles of the player and AI tanks. It sets up the collision and projectile 
+	movement components necessary for projectile motion and hitting other objects in the scene. The most important function, OnHit
+	allows different projectile behaviors whether a projectle hits a wall, a tank, and AI bot, or a health pack in the scene.
 */
 
 // Fill out your copyright notice in the Description page of Project Settings.
@@ -47,16 +49,10 @@ AShell::AShell()
 void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (GEngine){
+		//If the object hit is a wall, check if it is a breakable wall, update its hit counter and "destroy" the
+		//Wall if it has been hit 2 or more times. Allows the shell to bounce
 		if (otherActor->GetActorLabel().Contains(TEXT("Wall"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
 			AWall* ThisWall = Cast<AWall>(otherActor);
-			//FVector newDir = this->GetVelocity();
-			//if (ThisWall->orientation){ //if the wall is vertical
-			//	ProjectileMovement->SetVelocityInLocalSpace(FVector((newDir.X * -1), newDir.Y, newDir.Z));
-			//}
-			//else {
-			//	ProjectileMovement->SetVelocityInLocalSpace(FVector(newDir.X, (newDir.Y * -1), newDir.Z));
-			//}
-
 			if (ThisWall->canBreak){
 				ThisWall->hits++;
 				if (ThisWall->hits >= 2){
@@ -64,9 +60,10 @@ void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse,
 					ThisWall->SetActorEnableCollision(false);
 				}
 			}
-			
 		}
 
+		//If the object hit is an AI bot, update its hit counter and destroy the actor if it has been hit more than 3 times
+		//Destroys the shell projectile on impact
 		else if (otherActor->GetActorLabel().Contains(TEXT("Bot"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
 			ABot* ThisBot = Cast<ABot>(otherActor);
 			ThisBot->hits += 1;
@@ -76,12 +73,14 @@ void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse,
 			this->Destroy();
 		}
 
+		//If the object hit is a player tank, decrement the tank's health. Destroys the shell projectile on impact
 		else if(otherActor->GetActorLabel().Contains(TEXT("Tank"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
 			AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 			HUD->LoseHealth();
 			this->Destroy();
 		}
 
+		//If the object hit is a health pack, increment the tank's health. Destroys the shell projectile on impact
 		else if (otherActor->GetActorLabel().Contains(TEXT("HealthPack"), ESearchCase::IgnoreCase, ESearchDir::FromEnd)){
 			AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 			HUD->AddHealth();

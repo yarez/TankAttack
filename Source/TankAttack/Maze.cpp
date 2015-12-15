@@ -2,7 +2,8 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the header file for the Health Pack class.
+	This is the cpp file for the Maze class. It randomly generates a solvable maze, but removes extra walls to form an obstacle course
+	and changes some of the remaining walls to a different material so that they are considered "breakable."
 */
 
 // Fill out your copyright notice in the Description page of Project Settings.

@@ -1,3 +1,11 @@
+/*
+	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
+	Date: 12-12-2015
+
+	This is the cpp file for the Player Tank class. It builds the tank by attaching the turret, and spawns the shell projectiles moving in the 
+	direction set by the TankController class.
+*/
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAttack.h"
@@ -144,12 +152,16 @@ void ATank::OnFire()
 {
 	if (bCanFire)
 	{
+		//Gets the rotation for the turret and the location to spawn from
+		//Spawns from the location of the socket attached at the end of the turret skeletal mesh
 		const FRotator SpawnRotation = GetControlRotation();
 		const FVector SpawnLocation = Turret->GetSocketLocation("GunSocket");
 
+		//Spawns a new shell projectile and sets its velocity to the set direction
 		AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
 		NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
 
+		//Only allows the player tank to shoot again after 1 second
 		bCanFire = false;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ATank::ShotTimerExpired, 1.f);
 

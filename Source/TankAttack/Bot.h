@@ -2,7 +2,7 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the header file for the Health Pack class.
+	This is the header file for the AI Bot class.
 */
 
 // Fill out your copyright notice in the Description page of Project Settings.
@@ -24,6 +24,7 @@ public:
 
 	void ShotTimerExpired();
 
+	//Set the initial amount of hits on the Bot to 0
 	int hits = 0;
 
 	FVector Direction;

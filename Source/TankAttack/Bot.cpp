@@ -2,7 +2,8 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the header file for the Health Pack class.
+	This is the cpp file for the AI Bot class. It builds the tank by attaching the turret, and spawns the shell projectiles moving in the 
+	direction set by the BotController class after being called by the behavior tree.
 */
 
 // Fill out your copyright notice in the Description page of Project Settings.
@@ -42,13 +43,16 @@ void ABot::BotOnFire()
 
 	GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm spawning ");
 
+		//Gets the rotation for the turret and the location to spawn from
+		//Spawns from the location of the socket attached at the end of the turret skeletal mesh
 		const FRotator SpawnRotation = GetControlRotation();
 		const FVector SpawnLocation = BotTurret->GetSocketLocation("GunSocket");
 
+		//Spawns a new shell projectile and sets its velocity to the set direction
 		AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
 		NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
 	
-
+		//Only allows the AI bot to shoot again after 1 second
 		//bCanFire = false;
 		//GetWorld()->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABot::ShotTimerExpired, 1.f);
 

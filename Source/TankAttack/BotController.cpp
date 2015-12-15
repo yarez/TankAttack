@@ -108,12 +108,14 @@ void ABotController::SetEnemy(class APawn* InPawn)
 	BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation());
 
+
+	//Calculates and sets the direction for the AI bot's projectile
 	ABot* ThisBot = Cast<ABot>(GetPawn());
 	ATank *Enemy = Cast<ATank>(this->BestPawn);
 	FVector dir;
-	dir = Enemy->GetActorLocation() - ThisBot->GetActorLocation();
-	dir = dir.GetSafeNormal(1.0f) * 1000;
-	ThisBot->Direction = FVector(dir.X, dir.Y, 0.f);
+	dir = Enemy->GetActorLocation() - ThisBot->GetActorLocation();	//Finds the vector between the AI bot and the player tank
+	dir = dir.GetSafeNormal(1.0f) * 1000;							//Normalizes and scales the vector for a uniform speed
+	ThisBot->Direction = FVector(dir.X, dir.Y, 0.f);				//Zeros out the Z value so the projectile moves solely on the horizontal plane
 }
 
 

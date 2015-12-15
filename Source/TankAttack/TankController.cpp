@@ -44,8 +44,9 @@ void ATankController::SetPointLocation(const FVector Location){
 		Tank->Turret->SetWorldRotation(FRotator(0.f, Rot.Yaw, 0.f));
 	}
 
+	//Calculates and sets the direction for the player tank's projectile 
 	FVector dir;
-	dir = Hit.ImpactPoint - Tank->GetActorLocation();
-	dir = dir.GetSafeNormal(1.0f) * 1000;
-	Tank->Direction = FVector(dir.X, dir.Y, 0.f);
+	dir = Hit.ImpactPoint - Tank->GetActorLocation();	//Finds the vector between the tank and the cursor
+	dir = dir.GetSafeNormal(1.0f) * 1000;				//Normalizes and scales the vector to a uniform speed
+	Tank->Direction = FVector(dir.X, dir.Y, 0.f);		//Zeros out the  Z value so the projectile moves solely on the hoeizontal plane
 }

@@ -2,7 +2,7 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the header file for the Health Pack class.
+	This is the header file for the Shell class for the projectiles of the player and AI tanks.
 */
 
 // Fill out your copyright notice in the Description page of Project Settings.
@@ -17,16 +17,14 @@ class AShell : public AActor
 {
 	GENERATED_BODY()
 
-		/** Sphere collision component */
-		UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	/** Sphere collision component */
+	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	class USphereComponent* CollisionComp;
-
-	/** Projectile movement component */
-
 
 public:
 	AShell();
 
+	/** Projectile movement component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileMovement;
 

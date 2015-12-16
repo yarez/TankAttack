@@ -33,14 +33,16 @@ ATank::ATank()
 
 	// Create a camera...
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
-	CameraComponent->AttachTo(CameraBoom, USpringArmComponent::SocketName);
+	CameraComponent->AttachTo(CameraBoom, USpringArmComponent::SocketName); //Attach the camera to the create boom component
 	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
 
+	//Create a turret component
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TurretMesh(TEXT("/Game/tgun.tgun"));
 	Turret = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerTurret"));
-	Turret->AttachTo(RootComponent);
+	Turret->AttachTo(RootComponent); //Attach the turret to the top of the base tank
 	Turret->SetSkeletalMesh(TurretMesh.Object);
 
+	//Set the rate at which the tank body turns when the keys are pressed
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
 
@@ -51,7 +53,6 @@ ATank::ATank()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->AirControl = 0.2f;
 
 }
 
@@ -99,18 +100,13 @@ void ATank::TurnAtRate(float Rate)
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void ATank::LookUpAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-}
-
+//move the tank according to the direction pressed 
 void ATank::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		AMyHUD* InHUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-		if (InHUD->canMove){
+		if (InHUD->canMove){ //If the game is not paused, canMove is true
 			// find out which way is forward
 			const FRotator Rotation = Controller->GetControlRotation();
 			const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -122,12 +118,13 @@ void ATank::MoveForward(float Value)
 	}
 }
 
+//move the tank according to the direction pressed 
 void ATank::MoveRight(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		AMyHUD* InHUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-		if (InHUD->canMove){
+		if (InHUD->canMove){ //If the game is not paused, canMove is true
 			// find out which way is right
 			const FRotator Rotation = Controller->GetControlRotation();
 			const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -140,14 +137,16 @@ void ATank::MoveRight(float Value)
 	}
 }
 
+//Toggle the in-game menu, and pause the game
 void ATank::ToggleMenu(){
-	AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()); //Must cast a HUD pointer to the specific HUD instance in the player controller
 	if (HUD->DontDrawHUD == true){
 		HUD->DontDrawHUD = false;
 		HUD->ThePC->ConsoleCommand("Pause");
 	}
 }
 
+//Control the projectile firing by clicking the mouse button
 void ATank::OnFire()
 {
 	if (bCanFire)

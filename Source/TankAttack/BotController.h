@@ -24,28 +24,37 @@ class TANKATTACK_API ABotController : public AAIController
 public:
 	ABotController(const class FObjectInitializer& PCIP);
 
+	//Component pointer for the Blackboard to use with the behavior tree 
 	UPROPERTY(transient)
 		UBlackboardComponent* BlackboardComp;
 
+	//Behavior tree pointer to the bot's "brain"
 	UPROPERTY(transient)
 		UBehaviorTreeComponent* BehaviorComp;
 
+	//Posses a bot class
 	virtual void Possess(class APawn *InPawn);
 
+	//Set the closest enemy found to the target
 	void SetEnemy(class APawn *InPawn);
 
+	//Find the closest player to the bot
 	UFUNCTION(BlueprintCallable, Category = Behavior)
 		void SearchForEnemy();
 
+	//Return true if the found player is within line-of-sight
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		bool PawnCanBeSeen(APawn * target);
 
+	//The Bot's target
 	ATank* BestPawn;
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
+	
+	//keys used for the bot blackboard
 	uint8 EnemyKeyID;
 	uint8 EnemyLocationID;
 	uint8 CanMoveID;

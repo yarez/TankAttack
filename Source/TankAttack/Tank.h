@@ -30,8 +30,10 @@ public:
 	// Sets default values for this character's properties
 	ATank();
 
+	//Direction vector for the tank's turret, used by OnFire()
 	FVector Direction;
 
+	//Mesh component for the turret
 	UPROPERTY(Category = TankParts, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* Turret;
 
@@ -51,9 +53,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class USoundBase* FireSound;
 
+	//Function to fire a projectile
 	UFUNCTION(BlueprintCallable, Category = GunGunGun)
 		void OnFire();
 
+	//Pause the game and display the menu
 	void ToggleMenu();
 
 protected:

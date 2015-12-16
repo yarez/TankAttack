@@ -15,11 +15,13 @@ ABots::ABots()
 	DummyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Dummy0"));
 	RootComponent = DummyRoot;
 
+	//Find the blueprint object class for ABot
 	static ConstructorHelpers::FObjectFinder<UBlueprint> EnemyBot(TEXT("Blueprint'/Game/EnemyBot.EnemyBot'"));
 	if (EnemyBot.Object){
 		BotBlueprint = (UClass*)EnemyBot.Object->GeneratedClass;
 	}
 
+	//Establishes the number of bots to spawn
 	BotSpawn = 3;
 }
 
@@ -28,8 +30,7 @@ void ABots::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bots = new ABot*[BotSpawn];
-	
+	//Loop to spawn the bots next to each other
 	for (int32 BotIndex = 0; BotIndex<BotSpawn; BotIndex++)
 	{
 		const float XOffset = (BotIndex / BotSpawn) * 300; // Divide by dimension
@@ -39,7 +40,6 @@ void ABots::BeginPlay()
 		const FVector BotLocation = FVector(XOffset + 20, YOffset, 0.f) + GetActorLocation();
 		ABot *NewBot = GetWorld()->SpawnActor<ABot>(BotBlueprint, BotLocation, FRotator(0, 0, 0));
 
-		bots[BotIndex] = NewBot;
 	}
 }
 

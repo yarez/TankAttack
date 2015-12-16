@@ -2,7 +2,7 @@
 	Names: Taylor Anderson-Barkley, William Bennett, Kira Foglesong
 	Date: 12-12-2015
 
-	This is the cpp file for the AI Bot class. It builds the tank by attaching the turret, and spawns the shell projectiles moving in the 
+	This is the cpp file for the AI Bot class. It builds the tank by attaching the turret to the blueprint class, and spawns the shell projectiles moving in the 
 	direction set by the BotController class after being called by the behavior tree.
 */
 
@@ -23,11 +23,13 @@ ABot::ABot(const class FObjectInitializer&)
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//Creates the turret and attatches it to the tank
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TurretMesh(TEXT("/Game/tgun.tgun"));
 	BotTurret = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerTurret"));
 	BotTurret->AttachTo(RootComponent);
 	BotTurret->SetSkeletalMesh(TurretMesh.Object);
 
+	//Initially links the bot tot the bot controller class
 	AIControllerClass = ABotController::StaticClass();
 }
 
@@ -58,6 +60,7 @@ void ABot::BotOnFire()
 
 }
 
+//Allows the bot to shoot again after the shot timer expires
 void ABot::ShotTimerExpired()
 {
 	bCanFire = true;

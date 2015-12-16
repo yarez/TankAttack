@@ -14,6 +14,7 @@
 
 ATankController::ATankController()
 {
+	//Display the cursor as a crosshair to aid aiming
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableTouchEvents = true;
@@ -24,9 +25,6 @@ void ATankController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	// Trace to see what is under the mouse cursor
-
-	// Trace to see what is under the mouse cursor
-
 	GetHitResultUnderCursor(ECC_Visibility, false, Hit);
 
 	if (Hit.bBlockingHit)

@@ -18,6 +18,7 @@ public:
 	// Sets default values for this actor's properties
 	ABots();
 
+	//Controls the amount of bots to spawn in the scene
 	UPROPERTY(Category = BotSpawn, EditAnywhere, BlueprintReadOnly)
 	int32 BotSpawn;
 
@@ -28,6 +29,7 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	//Establishes the bot blueprint as a subclass of ABot
 	TSubclassOf<class ABot> BotBlueprint;
 	
 };

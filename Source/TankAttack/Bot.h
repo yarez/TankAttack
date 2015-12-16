@@ -19,6 +19,7 @@ class TANKATTACK_API ABot : public ACharacter
 
 public:
 
+	//Bot fire function. Blueprint callable, so the behavior tree can access it
 	UFUNCTION(BlueprintCallable, Category = GunGunGun)
 	void BotOnFire();
 
@@ -27,6 +28,7 @@ public:
 	//Set the initial amount of hits on the Bot to 0
 	int hits = 0;
 
+	//Direction Vector for the bot's turret
 	FVector Direction;
 
 	/* Flag to control firing  */
@@ -35,9 +37,11 @@ public:
 	// Sets default values for this character's properties
 	ABot(const class FObjectInitializer&);
 
+	//Turret Mesh for the bot's turret
 	UPROPERTY(Category = TankParts, VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* BotTurret;
 
+	//Behavior component to control the AI
 	UPROPERTY(EditAnywhere, Category = Behavior)
 	class UBehaviorTree* BotBehavior;
 

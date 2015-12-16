@@ -17,6 +17,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyAllTypes.h"
 
+//Default Constructor: Establishes the bot with a Behavior and blackboard component, to link to the behavior tree and blackboard
 ABotController::ABotController(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
@@ -24,26 +25,32 @@ ABotController::ABotController(const class FObjectInitializer& PCIP)
 
 	BehaviorComp = PCIP.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 
+	//Make sure BestPawn is initially NULL
 	BestPawn = NULL;
 }
 
+//Function to posses a bot with the specific BotController instance
 void ABotController::Possess(class APawn* InPawn)
 {
 	Super::Possess(InPawn);
-	ABot* Bot = Cast<ABot>(InPawn);
-	if (Bot && Bot->BotBehavior)
+	ABot* Bot = Cast<ABot>(InPawn); //Cast the incoming pawn as a bot class
+	if (Bot && Bot->BotBehavior) // make sure the incoming bot exists and has a behavior component
 	{
 		UBlackboardData* BlackboardData = Bot->BotBehavior->BlackboardAsset;
+
+		//initializes the blackboard keys to be set during play
 		BlackboardComp->InitializeBlackboard(*BlackboardData);
 		EnemyKeyID = BlackboardComp->GetKeyID("Enemy");
 		EnemyLocationID = BlackboardComp->GetKeyID("Destination");
 		CanMoveID = BlackboardComp->GetKeyID("CanMove");
-		HasStartedID = BlackboardComp->GetKeyID("HasStarted");
+		HasStartedID = BlackboardComp->GetKeyID("HasStarted"); 
 
+		//Begin the behavior tree once the blackboard keys have been established
 		BehaviorComp->StartTree(*Bot->BotBehavior);
 	}
 }
 
+//A function to determine if the found enemy is within the line-of-sight of the bot
 bool ABotController::PawnCanBeSeen(APawn* target)
 {
 	if (target == NULL || GetPawn() == NULL)
@@ -53,6 +60,7 @@ bool ABotController::PawnCanBeSeen(APawn* target)
 	FVector difference = target->GetActorLocation() - GetPawn()->GetActorLocation();
 	float angle = FVector::DotProduct(difference, GetPawn()->GetActorRotation().Vector());
 
+	//LineOfSightTo determines if the bot can see the actor in the direction it's facing
 	if (LineOfSightTo(target, GetPawn()->GetActorLocation()) && angle >0)
 	{
 		return true;
@@ -63,6 +71,7 @@ bool ABotController::PawnCanBeSeen(APawn* target)
 	}
 }
 
+// Function to set the bot's target to the closest player-controlled tank
 void ABotController::SearchForEnemy()
 {
 	APawn* MyBot = GetPawn();
@@ -70,12 +79,13 @@ void ABotController::SearchForEnemy()
 	if (MyBot == NULL)
 		return;
 
+	//indicate the that the game has now started
 	BlackboardComp->SetValue<UBlackboardKeyType_Bool>(HasStartedID, true);
 
 	const FVector MyLoc = MyBot->GetActorLocation();
 	float BestDistSq = MAX_FLT;
 	
-
+	//Iterate through the world objects, and set the closest found player to BestPawn
 	for (FConstPawnIterator It = GetWorld()->GetPawnIterator(); It; It++)
 	{
 		ATank* TestPawn = Cast<ATank>(*It);
@@ -88,8 +98,8 @@ void ABotController::SearchForEnemy()
 				BestDistSq = DistSq;
 				BestPawn = TestPawn;
 				if (PawnCanBeSeen(*It)){
-					FRotator Rot = FRotationMatrix::MakeFromX(BestPawn->GetActorLocation() - Tank->GetActorLocation()).Rotator();
-					Tank->BotTurret->SetWorldRotation(FRotator(0.f, Rot.Yaw, 0.f));
+					FRotator Rot = FRotationMatrix::MakeFromX(BestPawn->GetActorLocation() - Tank->GetActorLocation()).Rotator(); //Find the rotator required for the turret to face it's target
+					Tank->BotTurret->SetWorldRotation(FRotator(0.f, Rot.Yaw, 0.f)); //Point the turret to it's target
 				}
 			}
 		}
@@ -97,14 +107,14 @@ void ABotController::SearchForEnemy()
 
 	if (BestPawn)
 	{
-		SetEnemy(BestPawn);
+		SetEnemy(BestPawn); //Once the closest player is found, set the Bot's target
 	}
 
 }
 
 void ABotController::SetEnemy(class APawn* InPawn)
 {
-	FVector random = InPawn->GetActorLocation() + (rand() % 50) + 2;
+	//Set the blackboard keys to the object and location of the found enemy, for use in the MoveTo behavior tree task
 	BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 	BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLocationID, InPawn->GetActorLocation());
 

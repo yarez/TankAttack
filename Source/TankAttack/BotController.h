@@ -46,8 +46,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		bool PawnCanBeSeen(APawn * target);
 
+
+	/** Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+		TSubclassOf<class AShell> ProjectileClass;
+
 	//The Bot's target
 	ATank* BestPawn;
+
+	////Turret direction
+	//FVector Direction;
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;

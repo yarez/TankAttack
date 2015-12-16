@@ -86,7 +86,10 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 		// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 		InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 		InputComponent->BindAxis("TurnRate", this, &ATank::TurnAtRate);
+<<<<<<< HEAD
 		InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+=======
+>>>>>>> origin/master
 
 		InputComponent->BindAction("Fire", IE_Pressed, this, &ATank::OnFire);
 	//}
@@ -156,7 +159,9 @@ void ATank::OnFire()
 
 		//Spawns a new shell projectile and sets its velocity to the set direction
 		AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
-		NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
+		if (NewShell){
+			NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
+		}
 
 		//Only allows the player tank to shoot again after 1 second
 		bCanFire = false;

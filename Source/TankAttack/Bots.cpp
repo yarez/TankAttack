@@ -2,6 +2,7 @@
 
 #include "TankAttack.h"
 #include "Bots.h"
+#include "MyHUD.h"
 
 //Global Variables
 ABot** bots;
@@ -29,6 +30,9 @@ ABots::ABots()
 void ABots::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	HUD->botsRemaining = BotSpawn; 
 
 	//Loop to spawn the bots next to each other
 	for (int32 BotIndex = 0; BotIndex<BotSpawn; BotIndex++)

@@ -490,6 +490,7 @@ void AMyHUD::DrawHUD(){
 	if(gameover)
 		DrawText(TEXT("GAME OVER"), FColor::Red, (Canvas->SizeX / 2)-250, (Canvas->SizeY / 2)-50, ToyFont, 2.0F, false);
 
+
 	//Draw HUD?
 	//DrawHUD is only turned on when the menu button is pressed
 	if (DontDrawHUD) return;

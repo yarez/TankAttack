@@ -90,7 +90,7 @@ public:
 	bool InMainMenu;
 	bool canMove = false; 
 
-	int32 		ActiveButton_Type;
+	int32 	ActiveButton_Type;
 
 	//Colors
 	FLinearColor LC_Blue1 = FLinearColor(0, 0, 1, 1);
@@ -103,6 +103,8 @@ public:
 	bool add = false, lose = false; 
 	//Check if cursor is hovering over button
 	bool CursorHoveringInButton;
+
+	int32 botsRemaining; 
 
 	//Colors
 	const FLinearColor * ColorPtr;

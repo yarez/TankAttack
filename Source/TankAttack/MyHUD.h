@@ -104,7 +104,10 @@ public:
 	//Check if cursor is hovering over button
 	bool CursorHoveringInButton;
 
-	int32 botsRemaining; 
+	//Keeps track of the bots that remain alive
+	int32 botsRemaining;
+	//Keeps track of if the bots are all gone
+	bool botsKilled; 
 
 	//Colors
 	const FLinearColor * ColorPtr;
@@ -210,14 +213,14 @@ public:
 	float t;
 	//Handles for the timers used
 	FTimerHandle Handle1, Handle2, Handle3, Handle4, Handle5;
+	//Increments and Decrements health
 	void AddHealth();
 	void LoseHealth();
+	//Decrements bots when they die
+	void BotsDead();
 	float x = 330, y = 75;
 	bool d1 = false,d2 = false,d3 =false,d4=false,d5= true;
 	virtual void BeginPlay() override;
 	virtual void DrawHUD() override;
 	virtual void Tick(float DeltaTime) override;
-	void Draw();
-	void WinDraw();
-	void NoWinDraw();
 };

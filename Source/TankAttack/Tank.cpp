@@ -86,10 +86,8 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 		// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 		InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 		InputComponent->BindAxis("TurnRate", this, &ATank::TurnAtRate);
-<<<<<<< HEAD
 		InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-=======
->>>>>>> origin/master
+
 
 		InputComponent->BindAction("Fire", IE_Pressed, this, &ATank::OnFire);
 	//}

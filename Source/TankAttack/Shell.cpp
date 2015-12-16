@@ -68,6 +68,8 @@ void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse,
 			ABot* ThisBot = Cast<ABot>(otherActor);
 			ThisBot->hits += 1;
 			if (ThisBot->hits >= 3){
+				AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+				HUD->BotsDead();
 				otherActor->Destroy();
 			}
 			this->Destroy();

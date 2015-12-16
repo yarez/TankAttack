@@ -61,6 +61,12 @@ void AMyHUD::LoseHealth(){
 	lose = true;
 }
 
+void AMyHUD::BotsDead(){
+	botsRemaining--;
+	if (botsRemaining == 0)
+		botsKilled = true;
+}
+
 // Draw Dialogs
 void AMyHUD::DrawHUD_DrawDialogs()
 {
@@ -364,6 +370,8 @@ void AMyHUD::CheckCursorInButtonsMain()
 		//Restarts the level and resets information so everything redisplays on hud
 		d1 = true, d2 = false, d3 = false, d4 = false;
 		gameover = false;
+		LC_Blue1.A = 1, LC_Blue2.A = 1, LC_Blue3.A, LC_Blue4.A = 1, LC_Blue5.A = 1;
+		botsKilled = false;
 		ThePC->ConsoleCommand("RestartLevel");
 		return;
 	}
@@ -487,9 +495,17 @@ void AMyHUD::DrawHUD(){
 	}
 
 	//gameover text when gameover is reached
-	if(gameover)
-		DrawText(TEXT("GAME OVER"), FColor::Red, (Canvas->SizeX / 2)-250, (Canvas->SizeY / 2)-50, ToyFont, 2.0F, false);
+	if (gameover){
+		DrawText(TEXT("GAME OVER"), FColor::Red, (Canvas->SizeX / 2) - 250, (Canvas->SizeY / 2) - 30, ToyFont, 2.0F, false);
+		ThePC->ConsoleCommand("Pause");
+		DontDrawHUD = false;
+	}
 
+	if (botsKilled){
+		DrawText(TEXT("YOU WON!"), FColor::Red, (Canvas->SizeX / 2) - 250, (Canvas->SizeY / 2) - 30, ToyFont, 2.0F, false);
+		ThePC->ConsoleCommand("Pause");
+		DontDrawHUD = false;
+	}
 
 	//Draw HUD?
 	//DrawHUD is only turned on when the menu button is pressed
@@ -519,6 +535,7 @@ void AMyHUD::DrawHUD(){
 
 	
 }
+
 void AMyHUD::BeginPlay()
 {
 	Super::BeginPlay();
@@ -526,24 +543,9 @@ void AMyHUD::BeginPlay()
 	//Start the timer for the instructions as soon as you begin
 	GetWorldTimerManager().SetTimer(Handle5, 13.0f, false);
 	d1 = false, d2 = false, d3 = false, d4 = false, d5 = true;
+	LC_Blue1.A = 1, LC_Blue2.A = 1, LC_Blue3.A, LC_Blue4.A = 1, LC_Blue5.A = 1; 
+	botsKilled = false;
 	gameover = false; 
-}
-void AMyHUD::Draw(){
-	gameover = true;
-	//FString Over = "Game Over";
-	//FLinearColor FontC = FLinearColor(1.0f, 1.0f, 1.0f);
-	//FCanvasTextItem NewText(FVector2D(50, 50), FText::FromString(Over), HUDFont, FontC);
-	//NewText.Scale.Set(5,5);
-	//Canvas->DrawItem(NewText);
-}
-
-void AMyHUD::WinDraw(){
-	win = true;
-
-}
-
-void AMyHUD::NoWinDraw(){
-	nowin = true;
 }
 
 void AMyHUD::Tick(float DeltaTime){

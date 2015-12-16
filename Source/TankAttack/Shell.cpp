@@ -68,6 +68,7 @@ void AShell::OnHit(AActor* SelfActor, AActor *otherActor, FVector NormalImpulse,
 			ABot* ThisBot = Cast<ABot>(otherActor);
 			ThisBot->hits += 1;
 			if (ThisBot->hits >= 3){
+				//Call the BotsDead function in HUD to decrement the number of bots alive
 				AMyHUD* HUD = Cast<AMyHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 				HUD->BotsDead();
 				otherActor->Destroy();

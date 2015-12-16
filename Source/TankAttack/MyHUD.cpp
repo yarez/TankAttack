@@ -87,37 +87,40 @@ void AMyHUD::DrawConfirm()
 //Buttons
 void AMyHUD::DrawMainMenuButtons()
 {
-	//Start Point
-	float xStart = 100;
-	float yStart = 190;
+	float xStart, yStart; 
+	//Only displays the resume button when it is not gameover or you won
+	if (!gameover && !botsKilled){
+		//Start Point
+		xStart = 100;
+		yStart = 190;
 
-	//Background
-	//Tile imported into content browser with black border
-	DrawHUDRect(xStart-10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
-	VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
+		//Background
+		//Tile imported into content browser with black border
+		DrawHUDRect(xStart - 10, yStart - 10, 170, 80, FLinearColor(0, 0, 0, 1));
+		VDrawTile(ButtonBackground, xStart, yStart, 150, 60, FColor(255, 255, 255, 255)); //alpha 120/255
 
-	//Resume Text for Menu
-	DrawHUDText(
-		SketchFont, "Resume", xStart + 25, yStart + 10,
-		FColorBlack, DefaultFontScale,
-		false
-		);
+		//Resume Text for Menu
+		DrawHUDText(
+			SketchFont, "Resume", xStart + 25, yStart + 10,
+			FColorBlack, DefaultFontScale,
+			false
+			);
 
-	//Clear buttons with ButtonsMain.Empty()
-	//Sets up the info for the button with the struct
-	if (ButtonsMain.Num() < 1)
-	{
-		FHUDButtonStruct newButton = FHUDButtonStruct();
-		newButton.type = BUTTONTYPE_MAIN_RESUME;
-		newButton.minX = xStart;
-		newButton.maxX = xStart + 150;
-		newButton.minY = yStart;
-		newButton.maxY = yStart + 80;
+		//Clear buttons with ButtonsMain.Empty()
+		//Sets up the info for the button with the struct
+		if (ButtonsMain.Num() < 1)
+		{
+			FHUDButtonStruct newButton = FHUDButtonStruct();
+			newButton.type = BUTTONTYPE_MAIN_RESUME;
+			newButton.minX = xStart;
+			newButton.maxX = xStart + 150;
+			newButton.minY = yStart;
+			newButton.maxY = yStart + 80;
 
-		//Add to correct array
-		ButtonsMain.Add(newButton);
+			//Add to correct array
+			ButtonsMain.Add(newButton);
+		}
 	}
-
 	//Start Point
 	xStart = 100;
 	yStart = 280;
@@ -381,12 +384,16 @@ void AMyHUD::CheckCursorInButtonsMain()
 		ConfirmDialogOpen = true;
 		return;
 	}
-	if (ClickedButtonType == BUTTONTYPE_MAIN_RESUME)
-	{
-		//Unpauses the game when resume is selected
-		ThePC->ConsoleCommand("Pause");
-		DontDrawHUD = true; 
-		return;
+
+	//Only allows the resume to occur when it is not gameover or you won
+	if (!gameover && !botsKilled){
+		if (ClickedButtonType == BUTTONTYPE_MAIN_RESUME)
+		{
+			//Unpauses the game when resume is selected
+			ThePC->ConsoleCommand("Pause");
+			DontDrawHUD = true;
+			return;
+		}
 	}
 }
 
@@ -497,14 +504,15 @@ void AMyHUD::DrawHUD(){
 	//gameover text when gameover is reached
 	if (gameover){
 		DrawText(TEXT("GAME OVER"), FColor::Red, (Canvas->SizeX / 2) - 250, (Canvas->SizeY / 2) - 30, ToyFont, 2.0F, false);
-		ThePC->ConsoleCommand("Pause");
 		DontDrawHUD = false;
+		ThePC->ConsoleCommand("Pause");
 	}
 
+	//win text when all the bots are killed
 	if (botsKilled){
 		DrawText(TEXT("YOU WON!"), FColor::Red, (Canvas->SizeX / 2) - 250, (Canvas->SizeY / 2) - 30, ToyFont, 2.0F, false);
-		ThePC->ConsoleCommand("Pause");
 		DontDrawHUD = false;
+		ThePC->ConsoleCommand("Pause");
 	}
 
 	//Draw HUD?

@@ -447,11 +447,12 @@ void AMyHUD::DrawHUD(){
 			DrawHUDText(SketchFont, "Mouse to aim", x, y+63, FColorRed, .5F, true, LC_Red);
 			DrawHUDText(SketchFont, "Click to shoot", x, y+83, FColorRed, .5F, true, LC_Red);
 			DrawHUDText(SketchFont, "Some walls are breakable", x, y+103, FColorRed, .5F, true, LC_Red);
-			DrawHUDText(SketchFont, "Press M for Menu", x, y+123, FColorRed, .5F, true, LC_Red);
-			DrawHUDText(ToyFont, "-----------------", x, y+160, FColorRed, .5F, true, LC_Red);
-			DrawHUDText(ToyFont, "Goal:", x, y+200, FColorRed, 1.0F, true);
-			DrawHUDText(SketchFont, "Destroy every enemy", x, y+243, FColorRed, .5F, true,LC_Red);
-			DrawHUDText(SketchFont, "Be the sole survivor", x, y+263, FColorRed, .5F, true,LC_Red);
+			DrawHUDText(SketchFont, "Shoot health packs to gain health", x, y+123, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(SketchFont, "Press M for Menu", x, y + 143, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(ToyFont, "-----------------", x, y+180, FColorRed, .5F, true, LC_Red);
+			DrawHUDText(ToyFont, "Goal:", x, y+220, FColorRed, 1.0F, true);
+			DrawHUDText(SketchFont, "Destroy every enemy", x, y+263, FColorRed, .5F, true,LC_Red);
+			DrawHUDText(SketchFont, "Be the sole survivor", x, y+283, FColorRed, .5F, true,LC_Red);
 		}
 		else {
 			GetWorldTimerManager().ClearTimer(Handle5);

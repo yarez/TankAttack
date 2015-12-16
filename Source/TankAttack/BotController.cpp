@@ -11,6 +11,7 @@
 #include "Tank.h"
 #include "BotController.h"
 #include "Bot.h"
+#include "Shell.h"
 #include "MyHUD.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
@@ -27,6 +28,8 @@ ABotController::ABotController(const class FObjectInitializer& PCIP)
 
 	//Make sure BestPawn is initially NULL
 	BestPawn = NULL;
+
+	
 }
 
 //Function to posses a bot with the specific BotController instance
@@ -126,6 +129,7 @@ void ABotController::SetEnemy(class APawn* InPawn)
 	dir = Enemy->GetActorLocation() - ThisBot->GetActorLocation();	//Finds the vector between the AI bot and the player tank
 	dir = dir.GetSafeNormal(1.0f) * 1000;							//Normalizes and scales the vector for a uniform speed
 	ThisBot->Direction = FVector(dir.X, dir.Y, 0.f);				//Zeros out the Z value so the projectile moves solely on the horizontal plane
+
 }
 
 
@@ -137,6 +141,31 @@ void ABotController::Tick(float DeltaTime)
 	BlackboardComp->SetValue<UBlackboardKeyType_Bool>(CanMoveID, InHUD->canMove);
 
 }
+
+//void ABotController::BotOnFire()
+//{
+//
+//	ABot* ControlBot = Cast<ABot>(GetPawn());
+//
+//	//Gets the rotation for the turret and the location to spawn from
+//	//Spawns from the location of the socket attached at the end of the turret skeletal mesh
+//	const FRotator SpawnRotation = ControlBot->GetControlRotation();
+//	const FVector SpawnLocation = ControlBot->BotTurret->GetSocketLocation("GunSocket");
+//
+//	//Spawns a new shell projectile and sets its velocity to the set direction
+//	
+//	AShell *NewShell = GetWorld()->SpawnActor<AShell>(ProjectileClass, SpawnLocation, SpawnRotation);
+//	if (NewShell){
+//		NewShell->ProjectileMovement->SetVelocityInLocalSpace(Direction);
+//	}
+//
+//
+//	//Only allows the AI bot to shoot again after 1 second
+//	//bCanFire = false;
+//	//GetWorld()->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABot::ShotTimerExpired, 1.f);
+//
+//}
+
 
 
 

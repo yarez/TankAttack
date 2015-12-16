@@ -31,6 +31,10 @@ ABot::ABot(const class FObjectInitializer&)
 
 	//Initially links the bot tot the bot controller class
 	AIControllerClass = ABotController::StaticClass();
+
+	ProjectileClass = AShell::StaticClass();
+
+	Direction = FVector(0.f, 0.f, 0.f);
 }
 
 // Called when the game starts or when spawned
@@ -43,7 +47,7 @@ void ABot::BeginPlay()
 void ABot::BotOnFire()
 {
 
-	GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "I'm spawning ");
+	GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Blue, "Bot Fire ");
 
 		//Gets the rotation for the turret and the location to spawn from
 		//Spawns from the location of the socket attached at the end of the turret skeletal mesh

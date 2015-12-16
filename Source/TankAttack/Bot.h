@@ -19,9 +19,9 @@ class TANKATTACK_API ABot : public ACharacter
 
 public:
 
-	//Bot fire function. Blueprint callable, so the behavior tree can access it
-	UFUNCTION(BlueprintCallable, Category = GunGunGun)
-	void BotOnFire();
+	////Bot fire function. Blueprint callable, so the behavior tree can access it
+	//UFUNCTION(BlueprintCallable, Category = GunGunGun)
+	//void BotOnFire();
 
 	void ShotTimerExpired();
 
@@ -45,9 +45,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = Behavior)
 	class UBehaviorTree* BotBehavior;
 
-	/** Projectile class to spawn */
+	///** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class AShell> ProjectileClass;
+
+	//Bot fire function. Blueprint callable, so the behavior tree can access it
+	UFUNCTION(BlueprintCallable, Category = GunGunGun)
+	void BotOnFire();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
